@@ -1,0 +1,19 @@
+ToDo list:
+
+- Correct reading support (errors in the odd frame);
+
+- Correct writing support (errors in the odd frame, unreadable by PS);
+
+- Add pocketstation support;
+
+- Add clock support;
+
+- Split monolitic source;
+
+- Make possible read and write a particular frame value or a group (for example only 1 block);
+
+- Understand why there is the problem if send cmd in sequence;
+
+- Test under other libusb O.S. (Windows, MacOSX, Android, OpenBSD/NetBSD, Haiku);
+
+- add the source directly on pcsx-r project?
