@@ -16,7 +16,7 @@ gcc main.c `pkg-config --libs --cflags libusb-1.0`
 **Usage**
 
 "a.out r" for reading
-"a.out w" for writing
+"a.out w" for writing (WARNING need a write.mcd file)
 
 **Supported file**
 
@@ -49,6 +49,7 @@ If not, see <http://www.gnu.org/licenses/>.
 
 
 **Tested**
+
 Reading 90% with some errors in the odd frame.
 Writing 90% with some errors in the odd frame.
 
