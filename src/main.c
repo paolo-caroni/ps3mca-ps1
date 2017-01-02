@@ -2,7 +2,7 @@
  * this is a libusb program to communicate with the PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) for PS1 cards (SCPH-1020,
  * SCPH-1170 and SCPH-119X), maybe the PocketStation (SCPH-4000) and maybe other cards or device (like the MEMORY DISK DRIVE).
  *
- * Copyright (C) 2016 Paolo Caroni <kenren89@gmail.com>
+ * Copyright (C) 2017 Paolo Caroni <kenren89@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
