@@ -1,4 +1,4 @@
-# ps3mca-ps1-driver
+# <center> ps3mca-ps1-driver </center>
 ===
 
 this is a libusb driver to communicate with the PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) for PS1 cards (SCPH-1020, SCPH-1170 and SCPH-119X), maybe the PocketStation (SCPH-4000) and maybe other cards or device (like the MEMORY DISK DRIVE).
@@ -6,9 +6,9 @@ this is a libusb driver to communicate with the PlayStation 3 Memory Card Adapto
 
 **Requirements**
 
-* libusb (on MacOSX perhaps via [Homebrew](http://mxcl.github.io/homebrew/): `brew install libusb`);
+* libusb;
 * PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) or similar;
-* PS1 memory card.
+* PS1 memory card, PocketStation and maybe other cards or device (like the MEMORY DISK DRIVE).
 
 **Compiling**
 
@@ -41,7 +41,7 @@ This program is free software: you can redistribute it and/or modify it under th
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.<br>
 See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with this program.
+You should have received a copy of the GNU General Public License along with this program.<br>
 If not, see <http://www.gnu.org/licenses/>.
 
 
@@ -49,6 +49,12 @@ If not, see <http://www.gnu.org/licenses/>.
 
 Reading 90% with some errors in the odd frame.<br>
 Writing 90% with some errors in the odd frame, unreadable on PS<br>
+
+
+**Documentation**
+
+PS1 Memory Card
+<http://problemkaputt.de/psx-spx.htm#memorycardreadwritecommands><br>
 
 
 **Other similar but unrelated projects**
@@ -68,6 +74,8 @@ see:<br>
 If you live on U.S.A. DON'T download it.<br>
 In that confederation of states it is illegal (DMCA).<br>
 If you live in any other states:<br>
-<http://www.mirrorcreator.com/files/XVFKCQ6R/jimmikaelkael-ps3mca-tool-12a198f.zip_links>
+<http://www.mirrorcreator.com/files/XVFKCQ6R/jimmikaelkael-ps3mca-tool-12a198f.zip_links><br>
+
+
 
 
