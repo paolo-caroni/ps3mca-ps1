@@ -44,6 +44,27 @@ void delay(int milliseconds)		/* delay definition*/
         now = clock();
 }
 
+void close_ps3mca()			/* umount the ps3mca*/
+{
+
+  /* Release interface #0. */
+  res = libusb_release_interface(handle, 0);
+  if (0 != res)
+  {
+    fprintf(stderr, "Error releasing interface.\n");
+  }
+
+  /* If we detached a kernel driver from interface #0 earlier, we'll now 
+   * need to attach it again.  */
+  if (kernelDriverDetached)
+  {
+    libusb_attach_kernel_driver(handle, 0);
+  }
+
+  /* Shutdown libusb. */
+  libusb_exit(0);
+
+}
 
 
 /* --------------------------------------------PS3mca verification of card (PS1 or PS2)---------------------------------------------*/
@@ -269,7 +290,9 @@ int PS1_get_id ()
         /* Verify if PS3mca send status succes code*/
         if (bulk_buffer[0] == RESPONSE_CODE & bulk_buffer[1] == RESPONSE_STATUS_SUCCES)
         {
+	  #if DEBUG
           printf("Autentication verified.\n\n");
+          #endif
 
           /* Verify if is a memory card (SCPH-1020) or a PocketStation (SCPH-4000)*/
           if (bulk_buffer[6] == PS1CARD_REPLY_MC_ID_1 & bulk_buffer[7] == PS1CARD_REPLY_MC_ID_2 & bulk_buffer[8] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_1 & bulk_buffer[9] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_2 & bulk_buffer[10] ==  PS1CARD_REPLY_NUMBER_FRAME_1 & bulk_buffer[11] == PS1CARD_REPLY_NUMBER_FRAME_2 & bulk_buffer[12] == PS1CARD_REPLY_FRAME_SIZE_1 & bulk_buffer[13] == PS1CARD_REPLY_FRAME_SIZE_2)
@@ -311,6 +334,182 @@ int PS1_get_id ()
 
 }
 /* ----------------------------------------------------End of PS1 command get id----------------------------------------------------*/
+
+
+
+
+
+
+/* ---------------------------------------------------PocketStation command get id--------------------------------------------------*/
+int PocketStation_get_id ()
+{
+  uint8_t cmd_get_id_pkst[9];
+
+  /* This is the command get id for PocketStation (SCPH-4000)*/
+  memset(cmd_get_id_pkst, 0, sizeof(cmd_get_id_pkst));
+  /* first 4 byte are about ps3 memory card adapter protocol*/
+  cmd_get_id_pkst[0] = PS3MCA_CMD_FIRST;			/* First command for ps3mca protocol*/
+  cmd_get_id_pkst[1] = PS3MCA_CMD_TYPE_LONG;			/* PS1 type of command*/
+  cmd_get_id_pkst[2] = 0x05;					/* 9-4=5=05 lenght of command. Can be cmd_get_id_pkst[2]=sizeof(cmd_get_id_pkst)-4*/
+  cmd_get_id_pkst[3] = 0x00;					/* memset set all to 0x00, but I prefer to specify it a second time ;)*/
+  /* this is the real command get id with lenght of 5=0x05*/
+  cmd_get_id_pkst[4] = PS1CARD_CMD_MEMORY_CARD_ACCESS;		/* Memory Card Access, principal command for any action with any memory card*/
+  cmd_get_id_pkst[5] = POCKETSTATION_CMD_GET_ID;		/* Send Get ID PocketStation Command (ASCII "X")*/
+  cmd_get_id_pkst[6] = 0x00;					/* Ask ???*/
+  cmd_get_id_pkst[7] = 0x00;					/* Ask ???*/
+  cmd_get_id_pkst[8] = 0x00;					/* Ask ???*/
+
+
+  
+  /* Send the message to endpoint with a 5000ms timeout. */
+  res = libusb_bulk_transfer(handle, BULK_WRITE_ENDPOINT, cmd_get_id_pkst, sizeof(cmd_get_id_pkst), &numBytes, USB_TIMEOUT);
+  if (res == 0)
+  {
+    printf("\nSend POKETSTATION GET ID COMMAND\n");
+    /* See on screen what is transmitted for debug purpose*/
+    #if DEBUG
+    printf("%d bytes transmitted successfully.\n\n", numBytes);
+    printf("%x \n", cmd_get_id[0]);
+    printf("%x \n", cmd_get_id[1]);
+    printf("%x \n", cmd_get_id[2]);
+    printf("%x \n", cmd_get_id[3]);
+    printf("%x \n", cmd_get_id[4]);
+    printf("%x \n", cmd_get_id[5]);
+    printf("%x \n", cmd_get_id[6]);
+    printf("%x \n", cmd_get_id[7]);
+    printf("%x \n", cmd_get_id[8]);
+    printf("\n");
+    #endif
+  }
+  else
+  {
+    fprintf(stderr, "Error sending message to device.\n");
+  }
+  /* Clean buffer.*/
+  memset(bulk_buffer, 0, sizeof(bulk_buffer));
+
+  /* Listen for a message.*/
+  /* Wait up to 5 seconds for a message to arrive on endpoint*/
+  res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, bulk_buffer, sizeof(bulk_buffer), &numBytes, USB_TIMEOUT);
+  if (0 == res)
+  {
+    if (numBytes == sizeof(bulk_buffer))
+    {
+        /* See on screen what arrive for debug purpose*/
+	#if DEBUG
+	printf("%x \n", bulk_buffer[0]);
+	printf("%x \n", bulk_buffer[1]);
+	printf("%x \n", bulk_buffer[2]);
+	printf("%x \n", bulk_buffer[3]);
+	printf("%x \n", bulk_buffer[4]);
+	printf("%x \n", bulk_buffer[5]);
+	printf("%x \n", bulk_buffer[6]);
+	printf("%x \n", bulk_buffer[7]);
+	printf("%x \n", bulk_buffer[8]);
+	printf("%x \n", bulk_buffer[9]);
+	printf("%x \n", bulk_buffer[10]);
+	printf("%x \n", bulk_buffer[11]);
+	printf("%x \n", bulk_buffer[12]);
+	printf("%x \n", bulk_buffer[13]);
+	printf("%x \n", bulk_buffer[14]);
+	printf("%x \n", bulk_buffer[15]);
+	printf("%x \n", bulk_buffer[16]);
+	printf("%x \n", bulk_buffer[17]);
+	printf("%x \n", bulk_buffer[18]);
+	printf("%x \n", bulk_buffer[19]);
+	printf("%x \n", bulk_buffer[20]);
+	printf("%x \n", bulk_buffer[21]);
+	printf("%x \n", bulk_buffer[22]);
+	printf("%x \n", bulk_buffer[23]);
+	printf("%x \n", bulk_buffer[24]);
+	printf("%x \n", bulk_buffer[25]);
+	printf("%x \n", bulk_buffer[26]);
+	printf("%x \n", bulk_buffer[27]);
+	printf("%x \n", bulk_buffer[28]);
+	printf("%x \n", bulk_buffer[29]);
+	printf("%x \n", bulk_buffer[30]);
+	printf("%x \n", bulk_buffer[31]);
+	printf("%x \n", bulk_buffer[32]);
+	printf("%x \n", bulk_buffer[33]);
+	printf("%x \n", bulk_buffer[34]);
+	printf("%x \n", bulk_buffer[35]);
+	printf("%x \n", bulk_buffer[36]);
+	printf("%x \n", bulk_buffer[37]);
+	printf("%x \n", bulk_buffer[38]);
+	printf("%x \n", bulk_buffer[39]);
+	printf("%x \n", bulk_buffer[40]);
+	printf("%x \n", bulk_buffer[41]);
+	printf("%x \n", bulk_buffer[42]);
+	printf("%x \n", bulk_buffer[43]);
+	printf("%x \n", bulk_buffer[44]);
+	printf("%x \n", bulk_buffer[45]);
+	printf("%x \n", bulk_buffer[46]);
+	printf("%x \n", bulk_buffer[47]);
+	printf("%x \n", bulk_buffer[48]);
+	printf("%x \n", bulk_buffer[49]);
+	printf("%x \n", bulk_buffer[50]);
+	printf("%x \n", bulk_buffer[51]);
+	printf("%x \n", bulk_buffer[52]);
+	printf("%x \n", bulk_buffer[53]);
+	printf("%x \n", bulk_buffer[54]);
+	printf("%x \n", bulk_buffer[55]);
+	printf("%x \n", bulk_buffer[56]);
+	printf("%x \n", bulk_buffer[57]);
+	printf("%x \n", bulk_buffer[58]);
+	printf("%x \n", bulk_buffer[59]);
+	printf("%x \n", bulk_buffer[60]);
+	printf("%x \n", bulk_buffer[61]);
+	printf("%x \n", bulk_buffer[62]);
+	printf("%x \n", bulk_buffer[63]);
+        #endif
+
+        /* Verify if PS3mca send status succes code*/
+        if (bulk_buffer[0] == RESPONSE_CODE & bulk_buffer[1] == RESPONSE_STATUS_SUCCES)
+        {
+	  #if DEBUG
+          printf("Autentication verified.\n\n");
+	  #endif
+
+          printf("This card seems to be a original PocketStation (SCPH-4000).\n");
+	  /* If responde appears as a Pocketstation, but can responde in various mode.*/
+          printf("%d.\n", bulk_buffer[6]);
+          printf("%d.\n", bulk_buffer[7]);
+          printf("%d.\n", bulk_buffer[8]);
+
+        } 
+
+        /* Verify if PS3mca send status wrong code*/
+        else if (bulk_buffer[0] == RESPONSE_CODE & bulk_buffer[1] == RESPONSE_WRONG)    
+        {
+          fprintf(stderr, "Autentication failed.\n");
+        }
+
+        /* Other unknown PS3mca error*/
+        else   
+        {
+          fprintf(stderr, "Unknown error on PS3mca protocol.\n");
+        }
+
+    }
+
+    /* No response, only PS3mca autentication.*/
+    else if (numBytes == 2)
+    {
+      printf("This seems to be a normal memorycard.\n\n");
+    }
+
+    else
+    {
+      fprintf(stderr, "Received %d bytes, expected %d or 2.\n", numBytes, sizeof(bulk_buffer));
+    }
+  }
+  else
+  {
+    fprintf(stderr, "Error receiving message.\n");
+  }
+
+}
+/* ------------------------------------------------End of PocketStation command get id----------------------------------------------*/
 
 
 
@@ -665,6 +864,23 @@ int PS1_write ()
           fprintf(stderr, "Bad frame Memory End Byte on frame %d.\n", frame);
         }
 
+	/* Verify Memory End Byte (0xFD=Reject write to Directory Entries of currently executed file)*/
+        else if (read_buffer[141] == POCKETSTATION_REPLY_REJECT_EXECUTED)
+        {
+          fprintf(stderr, "WARNING Reject write to Directory Entries of currently executed file on frame %d.\n", frame);
+          fprintf(stderr, "aborting for prevent to delete the currently executed file.\n");
+	  close_ps3mca();
+	  return -1;
+        }
+
+	/* Verify Memory End Byte (0xFE=Reject write to write-protected Broken Frame region)*/
+        else if (read_buffer[141] == POCKETSTATION_REPLY_REJECT_PROTECTED)
+        {
+          fprintf(stderr, "WARNING The write-protection is enabled by ComFlags.bit10 on frame %d.\n", frame);
+          fprintf(stderr, "Please unable write protection.\nAborting...\n");
+	  close_ps3mca();
+	  return -1;
+        }
 
     }
     else
@@ -766,6 +982,10 @@ int main(int argc, char*argv[])
 		return PS1_get_id ();
 		break;
 
+		case 'p':
+		return PocketStation_get_id ();
+		break;
+
 		case 'r':
 		return PS1_read ();
 		break;
@@ -777,23 +997,7 @@ int main(int argc, char*argv[])
 	}
   }
 
-
-  /* Release interface #0. */
-  res = libusb_release_interface(handle, 0);
-  if (0 != res)
-  {
-    fprintf(stderr, "Error releasing interface.\n");
-  }
-
-  /* If we detached a kernel driver from interface #0 earlier, we'll now 
-   * need to attach it again.  */
-  if (kernelDriverDetached)
-  {
-    libusb_attach_kernel_driver(handle, 0);
-  }
-
-  /* Shutdown libusb. */
-  libusb_exit(0);
+  close_ps3mca();
 
   return 0;
 }

@@ -82,8 +82,8 @@ uint8_t PS1CARD_CMD_WRITE = 			0x57;	/* Send Write Command (ASCII "W")*/
 uint8_t POCKETSTATION_CMD_GET_ID = 		0x58;	/* Send Get ID PocketStation Command (ASCII "X")*/
 uint8_t POCKETSTATION_CMD_59 = 			0x59;	/* Prepare File Execution with Dir_index, and Parameter*/
 uint8_t POCKETSTATION_CMD_5A = 			0x5a;	/* Get Dir_index, ComFlags, F_SN, Date, and Time*/
-uint8_t POCKETSTATION_CMD_TRANSFER_PCKST_PSX = 	0x5b;	/* Execute Function and transfer data from Pocketstation to PSX*/
-uint8_t POCKETSTATION_CMD_TRANSFER_PSX_PCKST = 	0x5c;	/* Execute Function and transfer data from PSX to Pocketstation*/
+uint8_t POCKETSTATION_CMD_TRANSFER_PKST_PSX = 	0x5b;	/* Execute Function and transfer data from Pocketstation to PSX*/
+uint8_t POCKETSTATION_CMD_TRANSFER_PSX_PKST = 	0x5c;	/* Execute Function and transfer data from PSX to Pocketstation*/
 uint8_t POCKETSTATION_CMD_DOWNLOAD_NOTIF = 	0x5d;	/* Execute Custom Download Notification Function*/
 uint8_t POCKETSTATION_CMD_COMFLAGS_1_3_2 = 	0x5e;	/* Get-and-Send ComFlags.bit1,3,2 (send new, get old)*/
 uint8_t POCKETSTATION_CMD_COMFLAGS_0 = 		0x5f;	/* Get-and-Send ComFlags.bit0 (send new, get old)*/
@@ -106,16 +106,6 @@ uint8_t PS1CARD_REPLY_NUMBER_FRAME_1 = 		0x04;	/* First two significant digits o
 uint8_t PS1CARD_REPLY_NUMBER_FRAME_2 = 		0x00;	/* Last two significant digits of the number of frame (0400h=1024)*/
 uint8_t PS1CARD_REPLY_FRAME_SIZE_1 = 		0x00;	/* First two significant digits of the frame size*/
 uint8_t PS1CARD_REPLY_FRAME_SIZE_2 = 		0x80;	/* Last two significant digits of the frame size (0080h=128)*/
-
-
-
-/* Command for get Memory Card ID only for PocketStation (SCPH-4000)*/
-//static const uint8_t PCKST_CMD_GET_ID[5] =     { 0x81,  /* Memory Card Access*/
-//						 0x58,  /* Send Get ID PocketStation Command (ASCII "X")*/
-//						 0x00,  /* Ask ???*/
-//						 0x00,  /* Ask ???*/
-//						 0x00}; /* Ask ???*/
-/* If responde appears as a Pocketstation, but can responde in various mode.*/
 
 
 /* -----------------------------------------------End of PS1 Memory Card commands list------------------------------------------------*/
