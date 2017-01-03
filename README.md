@@ -1,4 +1,4 @@
-# <center> ps3mca-ps1-driver </center>
+# ps3mca-ps1-driver
 ===
 
 this is a libusb driver to communicate with the PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) for PS1 cards (SCPH-1020, SCPH-1170 and SCPH-119X), maybe the PocketStation (SCPH-4000) and maybe other cards or device (like the MEMORY DISK DRIVE).
@@ -17,8 +17,11 @@ gcc main.c `pkg-config --libs --cflags libusb-1.0`
 
 **Usage**
 
+"a.out v" for verify what type of card is (PS1 or PS2).<br>
+"a.out g" for verify if is a original card. Some known bug. Don't run it if you have already run other commands in the last 5/10 minutes.<br>
+"a.out p" for verify if is a original PocketStation card.<br>
 "a.out r" for reading.<br>
-"a.out w" for writing (WARNING need a write.mcd file).<br>
+"a.out w" for writing (WARNING need a write.mcd file), unstable, use at your own risk.<br>
 
 **Supported file**
 
