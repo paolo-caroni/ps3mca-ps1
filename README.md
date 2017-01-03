@@ -18,7 +18,7 @@ gcc main.c `pkg-config --libs --cflags libusb-1.0`
 **Usage**
 
 "a.out v" for verify what type of card is (PS1 or PS2).<br>
-"a.out g" for verify if is a original card. Some known bug. Don't run it if you have already run other commands in the last 5/10 minutes.<br>
+"a.out g" for verify if is a original card. Some known bug (see doc/FAQ).<br>
 "a.out p" for verify if is a original PocketStation card.<br>
 "a.out r" for reading.<br>
 "a.out w" for writing (WARNING need a write.mcd file), unstable, use at your own risk.<br>

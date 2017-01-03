@@ -1,0 +1,4 @@
+PS1 get id command bug
+
+Don't run it if you have already run other commands in the last 5/10 minutes.
+Maybe can be a good idea remove your PS3mca unplug the USB, wait several minutes and replug it, then run this command.
