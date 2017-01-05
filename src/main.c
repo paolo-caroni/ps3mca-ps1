@@ -737,10 +737,6 @@ int PocketStation_get_dir_date ()
 
 
 	  /* See date set on PocketStation*/
-   (0)  TIME  Send dummy/zero, receive BCD Second               (00h..59h)
-   (0)  TIME  Send dummy/zero, receive BCD Minute               (00h..59h)
-   (0)  TIME  Send dummy/zero, receive BCD Hour                 (00h..23h)
-   (0)  TIME  Send dummy/zero, receive BCD Day of Week          (01h..07h)
 	  printf("For the Pocket Station is:\n");
 	  printf("the %x day ", bulk_buffer[17]);			/* Day*/
 	  printf("of the %x mounth ", bulk_buffer[18]);			/* Mounth*/
@@ -1270,6 +1266,10 @@ int main(int argc, char*argv[])
 
 		case 'p':
 		return PocketStation_get_id ();
+		break;
+
+		case 'd':
+		return PocketStation_get_dir_date ();
 		break;
             }
 	}
