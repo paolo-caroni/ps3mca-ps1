@@ -738,15 +738,15 @@ int PocketStation_get_dir_date ()
 
 	  /* See date set on PocketStation*/
 	  printf("For the Pocket Station is:\n");
-	  printf("the %x day ", bulk_buffer[17]);			/* Day*/
-	  printf("of the %x mounth ", bulk_buffer[18]);			/* Mounth*/
-	  printf("on %x%x \n", bulk_buffer[20], bulk_buffer[19]);	/* Century, year*/
+	  printf("the %x day ", bulk_buffer[17]);					/* Day*/
+	  printf("of the %x mounth ", bulk_buffer[18]);					/* Mounth*/
+	  printf("on %x%x \n", bulk_buffer[20], bulk_buffer[19]);			/* Century, year*/
 
 	  /* See time set on PocketStation*/
 	  printf("Clock set to:\n");
-	  printf("%x.%x.%x \n", bulk_buffer[23], bulk_buffer[22], bulk_buffer[21]);
+	  printf("%x.%x.%x \n", bulk_buffer[23], bulk_buffer[22], bulk_buffer[21]);	/* Hour.minutes.seconds*/
 
-	  printf("%x day of the week\n\n", bulk_buffer[24]);
+	  printf("%x day of the week\n\n", bulk_buffer[24]);				/* day (monday, tuesday, ...)*/
 
         } 
 
