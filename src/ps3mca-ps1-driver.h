@@ -61,7 +61,7 @@ uint8_t ps1_ram_buffer[256];				/* 256 bytes of RAM on chip*/
 /*
 int PS1CARD_BLOCK_SIZE = 8192;				/* single block 1024x8=8192 bytes*/
 /*
-int PS1CARD_MAX_BLOCK =16;				/* max number of block (however 1 is lost for formatting MC)*/
+int PS1CARD_MAX_BLOCK = 16;				/* max number of block (however 1 is lost for formatting MC)*/
 
 /* -------------------------------------------End of PS1 Memory Card definitions------------------------------------------------------*/
 

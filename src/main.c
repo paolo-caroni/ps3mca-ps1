@@ -24,16 +24,16 @@
 
 void processMessage(const uint8_t*);
 
-int res = 0;				/* return codes from libusb functions */
-int ret = 0;				/* return codes from libusb functions */
-libusb_device_handle* handle = 0;	/* handle for USB device */
+int res = 0;				/* Return codes from libusb functions */
+int ret = 0;				/* Return codes from libusb functions */
+libusb_device_handle* handle = 0;	/* Handle for USB device */
 int kernelDriverDetached = 0;		/* Set to 1 if kernel driver detached */
 int numBytes = 0;			/* Actual bytes transferred. */
 
 
 int c;					/* Checksum loop indicator*/
 
-void delay(int milliseconds)		/* delay definition*/
+void delay(int milliseconds)		/* Delay definition*/
 {
     long pause;
     clock_t now,then;
@@ -44,7 +44,7 @@ void delay(int milliseconds)		/* delay definition*/
         now = clock();
 }
 
-void close_ps3mca()			/* umount the ps3mca*/
+void close_ps3mca()			/* Unmount the ps3mca*/
 {
 
   /* Release interface #0. */
@@ -668,7 +668,7 @@ int PS1_read ()
 	/* Calc supposed checksum.*/
 	for (c = 12; c < 12+PS1CARD_FRAME_SIZE; c++)		/* Loop of msb + lsb + all data bytes*/
 	{
-	checksum = checksum ^ ps1_ram_buffer[c];			/* Checksum = MSB xor LSB xor all Data bytes*/
+	checksum = checksum ^ ps1_ram_buffer[c];		/* Checksum = MSB xor LSB xor all Data bytes*/
 	}
 
         /* Verify checksum*/
@@ -862,7 +862,12 @@ int PS1_write ()
         {
           fprintf(stderr, "WARNING Reject write to Directory Entries of currently executed file on frame %d.\n", frame);
           fprintf(stderr, "aborting for prevent to delete the currently executed file.\n");
+	  /* Clean and close the file input*/
+	  fflush(input);
+	  fclose(input);
+	  /* Unmount the ps3mca*/
 	  close_ps3mca();
+	  /* Close program with error status*/
 	  return -1;
         }
 
@@ -871,14 +876,19 @@ int PS1_write ()
         {
           fprintf(stderr, "WARNING The write-protection is enabled by ComFlags.bit10 on frame %d.\n", frame);
           fprintf(stderr, "Please unable write protection.\nAborting...\n");
+	  /* Clean and close the file input*/
+	  fflush(input);
+	  fclose(input);
+	  /* Unmount the ps3mca*/
 	  close_ps3mca();
+	  /* Close program with error status*/
 	  return -1;
         }
 
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected %d  on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
+      fprintf(stderr, "Received %d bytes, expected a maximum of %d  on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
     }
   }
 
@@ -990,6 +1000,7 @@ int main(int argc, char*argv[])
 	}
   }
 
+  /* Unmount the ps3mca*/
   close_ps3mca();
 
   return 0;
