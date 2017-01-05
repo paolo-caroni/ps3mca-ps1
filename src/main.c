@@ -679,61 +679,61 @@ int PocketStation_get_dir_date ()
 	  #if DEBUG
           printf("Set curr_dir_index.bit8_15 to %x.\n", bulk_buffer[7]);
 	  #endif
-	  curr_dir_index.bit8_15 = bulk_buffer[7];
+	  curr_dir_index_bit8_15 = bulk_buffer[7];
 
 	  /* Set curr_dir_index.bit0-7*/
 	  #if DEBUG
           printf("Set curr_dir_index.bit0_7 to %x.\n", bulk_buffer[8]);
 	  #endif
-	  curr_dir_index.bit0_7 = bulk_buffer[8];
+	  curr_dir_index_bit0_7 = bulk_buffer[8];
 
 	  /* Set ComFlags.bit0*/
 	  #if DEBUG
           printf("Set ComFlags.bit0 to %x.\n", bulk_buffer[9]);
 	  #endif
-	  comflags.bit0 = bulk_buffer[9];
+	  comflags_bit0 = bulk_buffer[9];
 
 	  /* Set ComFlags.bit1*/
 	  #if DEBUG
           printf("Set ComFlags.bit1 to %x.\n", bulk_buffer[10]);
 	  #endif
-	  comflags.bit1 = bulk_buffer[10];
+	  comflags_bit1 = bulk_buffer[10];
 
 	  /* Set ComFlags.bit3*/
 	  #if DEBUG
           printf("Set ComFlags.bit3 to %x.\n", bulk_buffer[11]);
 	  #endif
-	  comflags.bit3 = bulk_buffer[11];
+	  comflags_bit3 = bulk_buffer[11];
 
 	  /* Set ComFlags.bit2*/
 	  #if DEBUG
           printf("Set ComFlags.bit2 to %x.\n", bulk_buffer[12]);
 	  #endif
-	  comflags.bit2 = bulk_buffer[12];
+	  comflags_bit2 = bulk_buffer[12];
 
 	  /* Set F_SN.bit0-7*/
 	  #if DEBUG
           printf("Set F_SN.bit0-7 to %x.\n", bulk_buffer[13]);
 	  #endif
-	  f_sn.bit0_7 = bulk_buffer[13];
+	  f_sn_bit0_7 = bulk_buffer[13];
 
 	  /* Set F_SN.bit8-15*/
 	  #if DEBUG
           printf("Set F_SN.bit8-15 to %x.\n", bulk_buffer[14]);
 	  #endif
-	  f_sn.bit8_15 = bulk_buffer[14];
+	  f_sn_bit8_15 = bulk_buffer[14];
 
 	  /* Set F_SN.bit16-23*/
 	  #if DEBUG
           printf("Set F_SN.bit16-23 to %x.\n", bulk_buffer[15]);
 	  #endif
-	  f_sn.bit16_23 = bulk_buffer[15];
+	  f_sn_bit16_23 = bulk_buffer[15];
 
 	  /* Set F_SN.bit24-31*/
 	  #if DEBUG
           printf("Set F_SN.bit24-31 to %x.\n", bulk_buffer[16]);
 	  #endif
-	  f_sn.bit24_31 = bulk_buffer[16];
+	  f_sn_bit24_31 = bulk_buffer[16];
 
 
 	  /* See date set on PocketStation*/
