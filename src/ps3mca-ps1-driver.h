@@ -79,7 +79,7 @@ uint8_t PS1CARD_CMD_READ = 			0x52;	/* Send Read Command (ASCII "R")*/
 uint8_t PS1CARD_CMD_GET_ID = 			0x53;	/* Send Get ID Command (ASCII "S")*/
 uint8_t PS1CARD_CMD_WRITE = 			0x57;	/* Send Write Command (ASCII "W")*/
 
-/* Pocket Station commands list*/
+/* PocketStation commands list*/
 uint8_t POCKETSTATION_CMD_GET_ID = 		0x58;	/* Send Get ID PocketStation Command (ASCII "X")*/
 uint8_t POCKETSTATION_CMD_59 = 			0x59;	/* Prepare File Execution with Dir_index, and Parameter*/
 uint8_t POCKETSTATION_CMD_5A = 			0x5a;	/* Get Dir_index, ComFlags, F_SN, Date, and Time*/
@@ -89,6 +89,18 @@ uint8_t POCKETSTATION_CMD_DOWNLOAD_NOTIF = 	0x5d;	/* Execute Custom Download Not
 uint8_t POCKETSTATION_CMD_COMFLAGS_1_3_2 = 	0x5e;	/* Get-and-Send ComFlags.bit1,3,2 (send new, get old)*/
 uint8_t POCKETSTATION_CMD_COMFLAGS_0 = 		0x5f;	/* Get-and-Send ComFlags.bit0 (send new, get old)*/
 uint8_t POCKETSTATION_CMD_FUNC03 = 		0x50;	/* Change a FUNC 03h related value*/
+
+/* PocketStation variable list*/
+uint8_t curr_dir_index.bit0_7;
+uint8_t curr_dir_index.bit8_15;
+uint8_t comflags.bit0;
+uint8_t comflags.bit1;
+uint8_t comflags.bit2;
+uint8_t comflags.bit3;
+uint8_t f_sn.bit0_7;
+uint8_t f_sn.bit8_15;
+uint8_t f_sn.bit16_23;
+uint8_t f_sn.bit24_31;
 
 /* Expected reply from memory card (SCPH-1020) or PocketStation (SCPH-4000) or maybe other cards devices*/
 uint8_t PS1CARD_REPLY_MC_ID_1 = 		0x5a;	/* Memory Card ID1*/

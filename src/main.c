@@ -164,7 +164,7 @@ int PS1_get_id ()
   /* first 4 byte are about ps3 memory card adapter protocol*/
   cmd_get_id[0] = PS3MCA_CMD_FIRST;			/* First command for ps3mca protocol*/
   cmd_get_id[1] = PS3MCA_CMD_TYPE_LONG;			/* PS1 type of command*/
-  cmd_get_id[2] = 0x0a;					/* 14-4=10=0a lenght of command. Can be cmd_get_id[2]=sizeof(cmd_get_id)-4*/
+  cmd_get_id[2] = 0x0a;					/* 14-4=10=0ah lenght of command. Can be cmd_get_id[2]=sizeof(cmd_get_id)-4*/
   cmd_get_id[3] = 0x00;					/* memset set all to 0x00, but I prefer to specify it a second time ;)*/
   /* this is the real command get id with lenght of 10=0x0a*/
   cmd_get_id[4] = PS1CARD_CMD_MEMORY_CARD_ACCESS;	/* Memory Card Access, principal command for any action with any memory card*/
@@ -350,7 +350,7 @@ int PocketStation_get_id ()
   /* first 4 byte are about ps3 memory card adapter protocol*/
   cmd_get_id_pkst[0] = PS3MCA_CMD_FIRST;			/* First command for ps3mca protocol*/
   cmd_get_id_pkst[1] = PS3MCA_CMD_TYPE_LONG;			/* PS1 type of command*/
-  cmd_get_id_pkst[2] = 0x05;					/* 9-4=5=05 lenght of command. Can be cmd_get_id_pkst[2]=sizeof(cmd_get_id_pkst)-4*/
+  cmd_get_id_pkst[2] = 0x05;					/* 9-4=5=05h lenght of command. Can be cmd_get_id_pkst[2]=sizeof(cmd_get_id_pkst)-4*/
   cmd_get_id_pkst[3] = 0x00;					/* memset set all to 0x00, but I prefer to specify it a second time ;)*/
   /* this is the real command get id with lenght of 5=0x05*/
   cmd_get_id_pkst[4] = PS1CARD_CMD_MEMORY_CARD_ACCESS;		/* Memory Card Access, principal command for any action with any memory card*/
@@ -472,9 +472,9 @@ int PocketStation_get_id ()
 
           printf("This card seems to be a original PocketStation (SCPH-4000).\n");
 	  /* If responde appears as a Pocketstation, but can responde in various mode.*/
-          printf("%d.\n", bulk_buffer[6]);
-          printf("%d.\n", bulk_buffer[7]);
-          printf("%d.\n", bulk_buffer[8]);
+          printf("%x.\n", bulk_buffer[6]);
+          printf("%x.\n", bulk_buffer[7]);
+          printf("%x.\n", bulk_buffer[8]);
 
         } 
 
@@ -505,6 +505,281 @@ int PocketStation_get_id ()
 
 }
 /* ------------------------------------------------End of PocketStation command get id----------------------------------------------*/
+
+
+
+
+
+
+
+
+/* -------------------------------PocketStation command get Dir_index, ComFlags, F_SN, Date, and Time-------------------------------*/
+/*
+   Send Reply Comment
+   81h  N/A   Memory Card Access
+   5Ah  FLAG  Send Command 5Ah
+   (0)  12h   Send dummy/zero, receive length of following data (12h)
+   (0)  INDX  Send dummy/zero, receive curr_dir_index.bit8-15   (00h)
+   (0)  INDX  Send dummy/zero, receive curr_dir_index.bit0-7    (00h..0Fh)
+   (0)  FLG   Send dummy/zero, receive ComFlags.bit0            (00h or 01h)
+   (0)  FLG   Send dummy/zero, receive ComFlags.bit1            (00h or 01h)
+   (0)  FLG   Send dummy/zero, receive ComFlags.bit3            (00h or 01h)
+   (0)  FLG   Send dummy/zero, receive ComFlags.bit2            (00h or 01h)
+   (0)  SN    Send dummy/zero, receive F_SN.bit0-7              (whatever)
+   (0)  SN    Send dummy/zero, receive F_SN.bit8-15             (whatever)
+   (0)  SN    Send dummy/zero, receive F_SN.bit16-23            (whatever)
+   (0)  SN    Send dummy/zero, receive F_SN.bit24-31            (whatever)
+   (0)  DATE  Send dummy/zero, receive BCD Day                  (01h..31h)
+   (0)  DATE  Send dummy/zero, receive BCD Month                (01h..12h)
+   (0)  DATE  Send dummy/zero, receive BCD Year                 (00h..99h)
+   (0)  DATE  Send dummy/zero, receive BCD Century              (00h..99h)
+   (0)  TIME  Send dummy/zero, receive BCD Second               (00h..59h)
+   (0)  TIME  Send dummy/zero, receive BCD Minute               (00h..59h)
+   (0)  TIME  Send dummy/zero, receive BCD Hour                 (00h..23h)
+   (0)  TIME  Send dummy/zero, receive BCD Day of Week          (01h..07h)
+*/
+int PocketStation_get_dir_date ()
+{
+  uint8_t cmd_get_dir_date_pkst[25];
+
+  /* This is the command get id for PocketStation (SCPH-4000)*/
+  memset(cmd_get_dir_date_pkst, 0, sizeof(cmd_get_dir_date_pkst));
+  /* first 4 byte are about ps3 memory card adapter protocol*/
+  cmd_get_dir_date_pkst[0] = PS3MCA_CMD_FIRST;				/* First command for ps3mca protocol*/
+  cmd_get_dir_date_pkst[1] = PS3MCA_CMD_TYPE_LONG;			/* PS1 type of command*/
+  cmd_get_dir_date_pkst[2] = 0x15;					/* 25-4=21=15h lenght of command. Can be cmd_get_dir_date_pkst[2]=sizeof(cmd_get_dir_date_pkst)-4*/
+  cmd_get_dir_date_pkst[3] = 0x00;					/* memset set all to 0x00, but I prefer to specify it a second time ;)*/
+  /* this is the real command get id with lenght of 5=0x05*/
+  cmd_get_dir_date_pkst[4] = PS1CARD_CMD_MEMORY_CARD_ACCESS;		/* Memory Card Access, principal command for any action with any memory card*/
+  cmd_get_dir_date_pkst[5] = POCKETSTATION_CMD_5A;			/* Send Get Dir_index, ComFlags, F_SN, Date, and Time*/
+  /* according to memset all value are set to 0x00*/
+
+  
+  /* Send the message to endpoint with a 5000ms timeout. */
+  res = libusb_bulk_transfer(handle, BULK_WRITE_ENDPOINT, cmd_get_dir_date_pkst, sizeof(cmd_get_dir_date_pkst), &numBytes, USB_TIMEOUT);
+  if (res == 0)
+  {
+    printf("\nSend POKETSTATION get Dir_index, ComFlags, F_SN, Date, and Time COMMAND\n");
+    /* See on screen what is transmitted for debug purpose*/
+    #if DEBUG
+    printf("%d bytes transmitted successfully.\n\n", numBytes);
+    printf("%x \n", cmd_get_dir_date_pkst[0]);
+    printf("%x \n", cmd_get_dir_date_pkst[1]);
+    printf("%x \n", cmd_get_dir_date_pkst[2]);
+    printf("%x \n", cmd_get_dir_date_pkst[3]);
+    printf("%x \n", cmd_get_dir_date_pkst[4]);
+    printf("%x \n", cmd_get_dir_date_pkst[5]);
+    printf("\n");
+    #endif
+  }
+  else
+  {
+    fprintf(stderr, "Error sending message to device.\n");
+  }
+  /* Clean buffer.*/
+  memset(bulk_buffer, 0, sizeof(bulk_buffer));
+
+  /* Listen for a message.*/
+  /* Wait up to 5 seconds for a message to arrive on endpoint*/
+  res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, bulk_buffer, sizeof(bulk_buffer), &numBytes, USB_TIMEOUT);
+  if (0 == res)
+  {
+    if (numBytes <= sizeof(bulk_buffer))
+    {
+        /* See on screen what arrive for debug purpose*/
+	#if DEBUG
+	printf("%x \n", bulk_buffer[0]);
+	printf("%x \n", bulk_buffer[1]);
+	printf("%x \n", bulk_buffer[2]);
+	printf("%x \n", bulk_buffer[3]);
+	printf("%x \n", bulk_buffer[4]);
+	printf("%x \n", bulk_buffer[5]);
+	printf("%x \n", bulk_buffer[6]);
+	printf("%x \n", bulk_buffer[7]);
+	printf("%x \n", bulk_buffer[8]);
+	printf("%x \n", bulk_buffer[9]);
+	printf("%x \n", bulk_buffer[10]);
+	printf("%x \n", bulk_buffer[11]);
+	printf("%x \n", bulk_buffer[12]);
+	printf("%x \n", bulk_buffer[13]);
+	printf("%x \n", bulk_buffer[14]);
+	printf("%x \n", bulk_buffer[15]);
+	printf("%x \n", bulk_buffer[16]);
+	printf("%x \n", bulk_buffer[17]);
+	printf("%x \n", bulk_buffer[18]);
+	printf("%x \n", bulk_buffer[19]);
+	printf("%x \n", bulk_buffer[20]);
+	printf("%x \n", bulk_buffer[21]);
+	printf("%x \n", bulk_buffer[22]);
+	printf("%x \n", bulk_buffer[23]);
+	printf("%x \n", bulk_buffer[24]);
+	printf("%x \n", bulk_buffer[25]);
+	printf("%x \n", bulk_buffer[26]);
+	printf("%x \n", bulk_buffer[27]);
+	printf("%x \n", bulk_buffer[28]);
+	printf("%x \n", bulk_buffer[29]);
+	printf("%x \n", bulk_buffer[30]);
+	printf("%x \n", bulk_buffer[31]);
+	printf("%x \n", bulk_buffer[32]);
+	printf("%x \n", bulk_buffer[33]);
+	printf("%x \n", bulk_buffer[34]);
+	printf("%x \n", bulk_buffer[35]);
+	printf("%x \n", bulk_buffer[36]);
+	printf("%x \n", bulk_buffer[37]);
+	printf("%x \n", bulk_buffer[38]);
+	printf("%x \n", bulk_buffer[39]);
+	printf("%x \n", bulk_buffer[40]);
+	printf("%x \n", bulk_buffer[41]);
+	printf("%x \n", bulk_buffer[42]);
+	printf("%x \n", bulk_buffer[43]);
+	printf("%x \n", bulk_buffer[44]);
+	printf("%x \n", bulk_buffer[45]);
+	printf("%x \n", bulk_buffer[46]);
+	printf("%x \n", bulk_buffer[47]);
+	printf("%x \n", bulk_buffer[48]);
+	printf("%x \n", bulk_buffer[49]);
+	printf("%x \n", bulk_buffer[50]);
+	printf("%x \n", bulk_buffer[51]);
+	printf("%x \n", bulk_buffer[52]);
+	printf("%x \n", bulk_buffer[53]);
+	printf("%x \n", bulk_buffer[54]);
+	printf("%x \n", bulk_buffer[55]);
+	printf("%x \n", bulk_buffer[56]);
+	printf("%x \n", bulk_buffer[57]);
+	printf("%x \n", bulk_buffer[58]);
+	printf("%x \n", bulk_buffer[59]);
+	printf("%x \n", bulk_buffer[60]);
+	printf("%x \n", bulk_buffer[61]);
+	printf("%x \n", bulk_buffer[62]);
+	printf("%x \n", bulk_buffer[63]);
+        #endif
+
+        /* Verify if PS3mca send status succes code*/
+        if (bulk_buffer[0] == RESPONSE_CODE & bulk_buffer[1] == RESPONSE_STATUS_SUCCES)
+        {
+	  #if DEBUG
+          printf("Autentication verified.\n\n");
+	  #endif
+
+          /* Verify lenght of data sended by PocketStation*/
+	  if (bulk_buffer[6] == 0x12)
+	  {
+	    #if DEBUG
+            printf("Good number of bytes sended by the pocketstation.\n\n");
+	    #endif
+	  }
+
+	  else
+	  {
+            fprintf(stderr, "The pocketstation send wrong number of bytes.\n");
+            fprintf(stderr, "%x instead of 12.\n\n", bulk_buffer[6]);
+	  }
+
+	  /* Set curr_dir_index.bit8-15*/
+	  #if DEBUG
+          printf("Set curr_dir_index.bit8_15 to %x.\n", bulk_buffer[7]);
+	  #endif
+	  curr_dir_index.bit8_15 = bulk_buffer[7];
+
+	  /* Set curr_dir_index.bit0-7*/
+	  #if DEBUG
+          printf("Set curr_dir_index.bit0_7 to %x.\n", bulk_buffer[8]);
+	  #endif
+	  curr_dir_index.bit0_7 = bulk_buffer[8];
+
+	  /* Set ComFlags.bit0*/
+	  #if DEBUG
+          printf("Set ComFlags.bit0 to %x.\n", bulk_buffer[9]);
+	  #endif
+	  comflags.bit0 = bulk_buffer[9];
+
+	  /* Set ComFlags.bit1*/
+	  #if DEBUG
+          printf("Set ComFlags.bit1 to %x.\n", bulk_buffer[10]);
+	  #endif
+	  comflags.bit1 = bulk_buffer[10];
+
+	  /* Set ComFlags.bit3*/
+	  #if DEBUG
+          printf("Set ComFlags.bit3 to %x.\n", bulk_buffer[11]);
+	  #endif
+	  comflags.bit3 = bulk_buffer[11];
+
+	  /* Set ComFlags.bit2*/
+	  #if DEBUG
+          printf("Set ComFlags.bit2 to %x.\n", bulk_buffer[12]);
+	  #endif
+	  comflags.bit2 = bulk_buffer[12];
+
+	  /* Set F_SN.bit0-7*/
+	  #if DEBUG
+          printf("Set F_SN.bit0-7 to %x.\n", bulk_buffer[13]);
+	  #endif
+	  f_sn.bit0_7 = bulk_buffer[13];
+
+	  /* Set F_SN.bit8-15*/
+	  #if DEBUG
+          printf("Set F_SN.bit8-15 to %x.\n", bulk_buffer[14]);
+	  #endif
+	  f_sn.bit8_15 = bulk_buffer[14];
+
+	  /* Set F_SN.bit16-23*/
+	  #if DEBUG
+          printf("Set F_SN.bit16-23 to %x.\n", bulk_buffer[15]);
+	  #endif
+	  f_sn.bit16_23 = bulk_buffer[15];
+
+	  /* Set F_SN.bit24-31*/
+	  #if DEBUG
+          printf("Set F_SN.bit24-31 to %x.\n", bulk_buffer[16]);
+	  #endif
+	  f_sn.bit24_31 = bulk_buffer[16];
+
+
+	  /* See date set on PocketStation*/
+   (0)  TIME  Send dummy/zero, receive BCD Second               (00h..59h)
+   (0)  TIME  Send dummy/zero, receive BCD Minute               (00h..59h)
+   (0)  TIME  Send dummy/zero, receive BCD Hour                 (00h..23h)
+   (0)  TIME  Send dummy/zero, receive BCD Day of Week          (01h..07h)
+	  printf("For the Pocket Station is:\n");
+	  printf("the %x day ", bulk_buffer[17]);			/* Day*/
+	  printf("of the %x mounth ", bulk_buffer[18]);			/* Mounth*/
+	  printf("on %x%x \n", bulk_buffer[20], bulk_buffer[19]);	/* Century, year*/
+
+	  /* See time set on PocketStation*/
+	  printf("Clock set to:\n");
+	  printf("%x.%x.%x \n", bulk_buffer[23], bulk_buffer[22], bulk_buffer[21]);
+
+	  printf("%x day of the week\n\n", bulk_buffer[24]);
+
+        } 
+
+	/* Verify if PS3mca send status wrong code*/
+        else if (bulk_buffer[0] == RESPONSE_CODE & bulk_buffer[1] == RESPONSE_WRONG)    
+        {
+          fprintf(stderr, "Autentication failed.\n");
+        }
+
+        /* Other unknown PS3mca error*/
+        else   
+        {
+          fprintf(stderr, "Unknown error on PS3mca protocol.\n");
+        }
+
+    }
+
+    else
+    {
+      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
+    }
+  }
+  else
+  {
+    fprintf(stderr, "Error receiving message.\n");
+  }
+
+}
+/* ------------------------------End of PocketStation command get Dir_index, ComFlags, F_SN, Date, and Time-------------------------*/
 
 
 
@@ -551,7 +826,7 @@ int PS1_read ()
   /* first 4 byte are about ps3 memory card adapter protocol*/
   cmd_read[0] = PS3MCA_CMD_FIRST;			/* First command for ps3mca protocol*/
   cmd_read[1] = PS3MCA_CMD_TYPE_LONG;			/* PS1 type of command*/
-  cmd_read[2] = 0x8c;					/* 144-4=140=8c lenght of command. Can be cmd_read[2]=sizeof(cmd_read)-4*/
+  cmd_read[2] = 0x8c;					/* 144-4=140=8ch lenght of command. Can be cmd_read[2]=sizeof(cmd_read)-4*/
   cmd_read[3] = 0x00;					/* memset set all to 0x00, but I prefer to specify it a second time ;)*/
   /* this is the real command read with lenght of 140=0x8c*/
   cmd_read[4] = PS1CARD_CMD_MEMORY_CARD_ACCESS;		/* Memory Card Access, principal command for any action with any memory card*/
@@ -769,7 +1044,7 @@ int PS1_write ()
   /* first 4 byte are about ps3 memory card adapter protocol*/
   cmd_write[0] = PS3MCA_CMD_FIRST;			/* First command for ps3mca protocol*/
   cmd_write[1] = PS3MCA_CMD_TYPE_LONG;			/* PS1 type of command*/
-  cmd_write[2] = 0x8a;					/* 142-4=138=8a lenght of command. Can be cmd_write[2]=sizeof(cmd_write)-4*/
+  cmd_write[2] = 0x8a;					/* 142-4=138=8ah lenght of command. Can be cmd_write[2]=sizeof(cmd_write)-4*/
   cmd_write[3] = 0x00;					/* memset set all to 0x00, but I prefer to specify it a second time ;)*/
   /* this is the real command write with lenght of 138=0x8a*/
   cmd_write[4] = PS1CARD_CMD_MEMORY_CARD_ACCESS;	/* Memory Card Access, principal command for any action with any memory card*/
@@ -985,16 +1260,16 @@ int main(int argc, char*argv[])
 		return PS1_get_id ();
 		break;
 
-		case 'p':
-		return PocketStation_get_id ();
-		break;
-
 		case 'r':
 		return PS1_read ();
 		break;
 
 		case 'w':
 		return PS1_write ();
+		break;
+
+		case 'p':
+		return PocketStation_get_id ();
 		break;
             }
 	}
