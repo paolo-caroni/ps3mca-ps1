@@ -534,7 +534,6 @@ int PocketStation_get_id ()
 int PS1_read ()
 {
   uint8_t cmd_read[144];
-  uint8_t read_buffer[144];				/* Read buffer*/
   FILE *output=fopen( "Readed_memory_card.mcd", "wb" );	/* Open and create a binary file output in writing*/
 
 
@@ -597,17 +596,17 @@ int PS1_read ()
   }
 
   /* Clean buffer.*/
-  memset(read_buffer, 0, sizeof(read_buffer));
+  memset(ps1_ram_buffer, 0, sizeof(ps1_ram_buffer));
 
   /* Listen for a message.*/
   /* Wait up to 5 seconds for a message to arrive on endpoint*/
-  res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, read_buffer, sizeof(read_buffer), &numBytes, USB_TIMEOUT);
+  res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, ps1_ram_buffer, sizeof(ps1_ram_buffer), &numBytes, USB_TIMEOUT);
   if (0 == res)
   {
-    if (numBytes == sizeof(read_buffer))
+    if (numBytes <= sizeof(ps1_ram_buffer))
     {
         /* Verify if PS3mca send status succes code*/
-        if (read_buffer[0] == RESPONSE_CODE & read_buffer[1] == RESPONSE_STATUS_SUCCES)
+        if (ps1_ram_buffer[0] == RESPONSE_CODE & ps1_ram_buffer[1] == RESPONSE_STATUS_SUCCES)
         {
 	  #if DEBUG
           printf("Autentication verified on frame %d.\n", frame);
@@ -618,7 +617,7 @@ int PS1_read ()
         }
 
         /* Verify if PS3mca send status wrong code*/
-        else if (read_buffer[0] == RESPONSE_CODE & read_buffer[1] == RESPONSE_WRONG)    
+        else if (ps1_ram_buffer[0] == RESPONSE_CODE & ps1_ram_buffer[1] == RESPONSE_WRONG)    
         {
           fprintf(stderr, "Autentication failed on frame %d.\n", frame);
         }
@@ -630,7 +629,7 @@ int PS1_read ()
         }
 
         /* Verify command acknowledge*/
-        if (read_buffer[10] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_1 & read_buffer[11] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_2)
+        if (ps1_ram_buffer[10] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_1 & ps1_ram_buffer[11] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_2)
         {
 	  #if DEBUG
           printf("Good command acknowledge on frame %d.\n", frame);
@@ -644,7 +643,7 @@ int PS1_read ()
         }
 
         /* Verify msb and lsb*/
-        if (read_buffer[12] == msb & read_buffer[13] == lsb)
+        if (ps1_ram_buffer[12] == msb & ps1_ram_buffer[13] == lsb)
         {
 	  #if DEBUG
           printf("Confirmed frame number on frame %d.\n", frame);
@@ -655,13 +654,13 @@ int PS1_read ()
         else   
         {
           fprintf(stderr, "Unknown frame number error on frame %d.\n", frame);
-          fprintf(stderr, "Return frame number %d %d.\n\n", read_buffer[12], read_buffer[13]);
+          fprintf(stderr, "Return frame number %d %d.\n\n", ps1_ram_buffer[12], ps1_ram_buffer[13]);
         }
 
 	/* This permit to select and save only the received Data Frame (PS1CARD_FRAME_SIZE=128 bytes).*/
 	/* First 14 bytes are about PS3mca (4 bytes) and PS1 (10 bytes) protocol.*/
 	/* Last 2 bytes are Checksum & Memory End Byte.*/
-	fwrite(&read_buffer[14], 1, PS1CARD_FRAME_SIZE, output);
+	fwrite(&ps1_ram_buffer[14], 1, PS1CARD_FRAME_SIZE, output);
 
 	/* Clean checksum.*/
 	checksum = 0x00;
@@ -669,11 +668,11 @@ int PS1_read ()
 	/* Calc supposed checksum.*/
 	for (c = 12; c < 12+PS1CARD_FRAME_SIZE; c++)		/* Loop of msb + lsb + all data bytes*/
 	{
-	checksum = checksum ^ read_buffer[c];			/* Checksum = MSB xor LSB xor all Data bytes*/
+	checksum = checksum ^ ps1_ram_buffer[c];			/* Checksum = MSB xor LSB xor all Data bytes*/
 	}
 
         /* Verify checksum*/
-        if (read_buffer[142] == checksum)
+        if (ps1_ram_buffer[142] == checksum)
         {
 	#if DEBUG
 	printf("Good checksum on frame %d.\n" frame);
@@ -684,12 +683,12 @@ int PS1_read ()
         else   
         {
           fprintf(stderr, "Incorrect checksum on frame %d.\n", frame);
-          fprintf(stderr, "Received %x, should be %x.\n\n", read_buffer[142], checksum);
+          fprintf(stderr, "Received %x, should be %x.\n\n", ps1_ram_buffer[142], checksum);
         }
 
 
         /* Verify MEB*/
-        if (read_buffer[143] == PS1CARD_REPLY_MEB_GOOD)
+        if (ps1_ram_buffer[143] == PS1CARD_REPLY_MEB_GOOD)
         {
 	#if DEBUG
 	printf("Good Memory End Byte on frame %d.\n" frame);
@@ -700,14 +699,14 @@ int PS1_read ()
         else   
         {
           fprintf(stderr, "Unknown Memory End Byte on frame %d.\n", frame);
-          fprintf(stderr, "Received %x, should be 47.\n\n", read_buffer[143]);
+          fprintf(stderr, "Received %x, should be 47.\n\n", ps1_ram_buffer[143]);
         }
 
 
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected %d  on frame %d.\n", numBytes, sizeof(read_buffer), frame);
+      fprintf(stderr, "Received %d bytes, expected a maximum of %d bytes on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
     }
   }
 
@@ -752,7 +751,6 @@ int PS1_read ()
 int PS1_write ()
 {
   uint8_t cmd_write[142];
-  uint8_t read_buffer[142];				/* Read buffer*/
   FILE *input=fopen( "write.mcd", "rb" );		/* Open write.mcd in reading*/
 
 
@@ -813,13 +811,13 @@ int PS1_write ()
 
   /* Listen for a message.*/
   /* Wait up to 5 seconds for a message to arrive on endpoint*/
-  res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, read_buffer, sizeof(read_buffer), &numBytes, USB_TIMEOUT);
+  res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, ps1_ram_buffer, sizeof(ps1_ram_buffer), &numBytes, USB_TIMEOUT);
   if (0 == res)
   {
-    if (numBytes == sizeof(read_buffer))
+    if (numBytes <= sizeof(ps1_ram_buffer))
     {
         /* Verify if PS3mca send status succes code*/
-        if (read_buffer[0] == RESPONSE_CODE & read_buffer[1] == RESPONSE_STATUS_SUCCES)
+        if (ps1_ram_buffer[0] == RESPONSE_CODE & ps1_ram_buffer[1] == RESPONSE_STATUS_SUCCES)
         {
 	  #if DEBUG
           printf("Autentication verified on frame %d.\n", frame);
@@ -827,7 +825,7 @@ int PS1_write ()
         } 
 
         /* Verify if PS3mca send status wrong code*/
-        else if (read_buffer[0] == RESPONSE_CODE & read_buffer[1] == RESPONSE_WRONG)    
+        else if (ps1_ram_buffer[0] == RESPONSE_CODE & ps1_ram_buffer[1] == RESPONSE_WRONG)    
         {
           fprintf(stderr, "Autentication failed on frame %d.\n", frame);
         }
@@ -840,7 +838,7 @@ int PS1_write ()
 
 
         /* Verify Memory End Byte (0x47h=Good)*/
-        if (read_buffer[141] == PS1CARD_REPLY_MEB_GOOD)
+        if (ps1_ram_buffer[141] == PS1CARD_REPLY_MEB_GOOD)
         {
 	  #if DEBUG
           printf("Good Memory End Byte on frame %d.\n", frame);
@@ -848,19 +846,19 @@ int PS1_write ()
         }
  
         /* Verify Memory End Byte (0x4E=BadChecksum)*/
-        else if (read_buffer[141] == PS1CARD_REPLY_MEB_BAD_CHECKSUM)
+        else if (ps1_ram_buffer[141] == PS1CARD_REPLY_MEB_BAD_CHECKSUM)
         {
           fprintf(stderr, "Bad Checksum Memory End Byte on frame %d.\n", frame);
         }
  
         /* Verify Memory End Byte (0xFF=BadFrame)*/
-        else if (read_buffer[141] == PS1CARD_REPLY_MEB_BAD_FRAME)
+        else if (ps1_ram_buffer[141] == PS1CARD_REPLY_MEB_BAD_FRAME)
         {
           fprintf(stderr, "Bad frame Memory End Byte on frame %d.\n", frame);
         }
 
 	/* Verify Memory End Byte (0xFD=Reject write to Directory Entries of currently executed file)*/
-        else if (read_buffer[141] == POCKETSTATION_REPLY_REJECT_EXECUTED)
+        else if (ps1_ram_buffer[141] == POCKETSTATION_REPLY_REJECT_EXECUTED)
         {
           fprintf(stderr, "WARNING Reject write to Directory Entries of currently executed file on frame %d.\n", frame);
           fprintf(stderr, "aborting for prevent to delete the currently executed file.\n");
@@ -869,7 +867,7 @@ int PS1_write ()
         }
 
 	/* Verify Memory End Byte (0xFE=Reject write to write-protected Broken Frame region)*/
-        else if (read_buffer[141] == POCKETSTATION_REPLY_REJECT_PROTECTED)
+        else if (ps1_ram_buffer[141] == POCKETSTATION_REPLY_REJECT_PROTECTED)
         {
           fprintf(stderr, "WARNING The write-protection is enabled by ComFlags.bit10 on frame %d.\n", frame);
           fprintf(stderr, "Please unable write protection.\nAborting...\n");
@@ -880,7 +878,7 @@ int PS1_write ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected %d  on frame %d.\n", numBytes, sizeof(read_buffer), frame);
+      fprintf(stderr, "Received %d bytes, expected %d  on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
     }
   }
 
@@ -892,7 +890,7 @@ int PS1_write ()
 
 
   /* Clean buffer.*/
-  memset(read_buffer, 0, sizeof(read_buffer));
+  memset(ps1_ram_buffer, 0, sizeof(ps1_ram_buffer));
 
   /* End of frame to frame loop*/
   }

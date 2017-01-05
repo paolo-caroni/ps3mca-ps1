@@ -57,6 +57,7 @@ uint16_t frame;						/* Frame value, 0000h to 03ffh*/
 uint8_t msb;						/* First two significant digits of the frame value*/
 uint8_t lsb;						/* Last two significant digits of the frame value*/
 uint8_t checksum;					/* Checksum variable*/
+uint8_t ps1_ram_buffer[256];				/* 256 bytes of RAM on chip*/
 /*
 int PS1CARD_BLOCK_SIZE = 8192;				/* single block 1024x8=8192 bytes*/
 /*
