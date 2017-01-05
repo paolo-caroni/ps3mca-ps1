@@ -217,7 +217,7 @@ int PS1_get_id ()
   res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, bulk_buffer, sizeof(bulk_buffer), &numBytes, USB_TIMEOUT);
   if (0 == res)
   {
-    if (numBytes == sizeof(bulk_buffer))
+    if (numBytes <= sizeof(bulk_buffer))
     {
         /* See on screen what arrive for debug purpose*/
 	#if DEBUG
@@ -324,7 +324,7 @@ int PS1_get_id ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected %d.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
@@ -393,7 +393,7 @@ int PocketStation_get_id ()
   res = libusb_bulk_transfer(handle, BULK_READ_ENDPOINT, bulk_buffer, sizeof(bulk_buffer), &numBytes, USB_TIMEOUT);
   if (0 == res)
   {
-    if (numBytes == sizeof(bulk_buffer))
+    if (numBytes <= sizeof(bulk_buffer))
     {
         /* See on screen what arrive for debug purpose*/
 	#if DEBUG
@@ -482,6 +482,7 @@ int PocketStation_get_id ()
         else if (bulk_buffer[0] == RESPONSE_CODE & bulk_buffer[1] == RESPONSE_WRONG)    
         {
           fprintf(stderr, "Autentication failed.\n");
+	  printf("This seems to be a normal memorycard.\n\n");
         }
 
         /* Other unknown PS3mca error*/
@@ -492,15 +493,9 @@ int PocketStation_get_id ()
 
     }
 
-    /* No response, only PS3mca autentication.*/
-    else if (numBytes == 2)
-    {
-      printf("This seems to be a normal memorycard.\n\n");
-    }
-
     else
     {
-      fprintf(stderr, "Received %d bytes, expected %d or 2.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
