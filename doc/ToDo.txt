@@ -1,16 +1,18 @@
 ToDo list:
 
-- Correct reading support (errors in the odd frame);
+- Correct reading support (errors in checksum);
 
-- Correct writing support (errors in the odd frame, unreadable by PS);
+- Correct writing support (errors in the odd frame);
 
-- Add pocketstation support;
+- Complete pocketstation support;
 
 - Add clock support;
 
 - Split monolitic source;
 
 - Make possible read and write a particular frame value or a group (for example only 1 block);
+
+- Make possible write only changed frame for improve lifetime of memorycard;
 
 - Understand why there is the problem if send cmd in sequence;
 
