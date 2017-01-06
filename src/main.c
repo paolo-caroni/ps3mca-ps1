@@ -677,61 +677,61 @@ int PocketStation_get_dir_date ()
 
 	  /* Set curr_dir_index.bit8-15*/
 	  #if DEBUG
-          printf("Set curr_dir_index.bit8_15 to %x.\n", bulk_buffer[7]);
+          printf("The curr_dir_index.bit8_15 is %x.\n", bulk_buffer[7]);
 	  #endif
 	  curr_dir_index_bit8_15 = bulk_buffer[7];
 
 	  /* Set curr_dir_index.bit0-7*/
 	  #if DEBUG
-          printf("Set curr_dir_index.bit0_7 to %x.\n", bulk_buffer[8]);
+          printf("The curr_dir_index.bit0_7 is %x.\n", bulk_buffer[8]);
 	  #endif
 	  curr_dir_index_bit0_7 = bulk_buffer[8];
 
 	  /* Set ComFlags.bit0*/
 	  #if DEBUG
-          printf("Set ComFlags.bit0 to %x.\n", bulk_buffer[9]);
+          printf("The ComFlags.bit0 is %x.\n", bulk_buffer[9]);
 	  #endif
 	  comflags_bit0 = bulk_buffer[9];
 
 	  /* Set ComFlags.bit1*/
 	  #if DEBUG
-          printf("Set ComFlags.bit1 to %x.\n", bulk_buffer[10]);
+          printf("The ComFlags.bit1 is %x.\n", bulk_buffer[10]);
 	  #endif
 	  comflags_bit1 = bulk_buffer[10];
 
 	  /* Set ComFlags.bit3*/
 	  #if DEBUG
-          printf("Set ComFlags.bit3 to %x.\n", bulk_buffer[11]);
+          printf("The ComFlags.bit3 is %x.\n", bulk_buffer[11]);
 	  #endif
 	  comflags_bit3 = bulk_buffer[11];
 
 	  /* Set ComFlags.bit2*/
 	  #if DEBUG
-          printf("Set ComFlags.bit2 to %x.\n", bulk_buffer[12]);
+          printf("The ComFlags.bit2 is %x.\n", bulk_buffer[12]);
 	  #endif
 	  comflags_bit2 = bulk_buffer[12];
 
 	  /* Set F_SN.bit0-7*/
 	  #if DEBUG
-          printf("Set F_SN.bit0-7 to %x.\n", bulk_buffer[13]);
+          printf("The F_SN.bit0-7 is %x.\n", bulk_buffer[13]);
 	  #endif
 	  f_sn_bit0_7 = bulk_buffer[13];
 
 	  /* Set F_SN.bit8-15*/
 	  #if DEBUG
-          printf("Set F_SN.bit8-15 to %x.\n", bulk_buffer[14]);
+          printf("The F_SN.bit8-15 is %x.\n", bulk_buffer[14]);
 	  #endif
 	  f_sn_bit8_15 = bulk_buffer[14];
 
 	  /* Set F_SN.bit16-23*/
 	  #if DEBUG
-          printf("Set F_SN.bit16-23 to %x.\n", bulk_buffer[15]);
+          printf("The F_SN.bit16-23 is %x.\n", bulk_buffer[15]);
 	  #endif
 	  f_sn_bit16_23 = bulk_buffer[15];
 
 	  /* Set F_SN.bit24-31*/
 	  #if DEBUG
-          printf("Set F_SN.bit24-31 to %x.\n", bulk_buffer[16]);
+          printf("The F_SN.bit24-31 is %x.\n", bulk_buffer[16]);
 	  #endif
 	  f_sn_bit24_31 = bulk_buffer[16];
 
@@ -773,10 +773,63 @@ int PocketStation_get_dir_date ()
 	    fprintf(stderr, "error for day of the week, received %x expected a value from 01 to 07.\n", bulk_buffer[26]);
 	  }
 
-	  /* Date in the day/month/year format*/
-	  printf(" %x/", bulk_buffer[17]);						/* Day*/
-	  printf("%x/", bulk_buffer[18]);						/* Mounth*/
-	  printf("%x%x\n", bulk_buffer[20], bulk_buffer[19]);				/* Century, year*/
+	  /* Day number*/
+	  printf(" %x ", bulk_buffer[17]);
+          /* Mounth name*/
+	  if (bulk_buffer[18] == 0x01)
+	  {
+            printf("January");
+	  }
+	  else if (bulk_buffer[18] == 0x02)
+	  {
+            printf("February");
+	  }
+	  else if (bulk_buffer[18] == 0x03)
+	  {
+            printf("March");
+	  }
+	  else if (bulk_buffer[18] == 0x04)
+	  {
+            printf("April");
+	  }
+	  else if (bulk_buffer[18] == 0x05)
+	  {
+            printf("May");
+	  }
+	  else if (bulk_buffer[18] == 0x06)
+	  {
+            printf("June");
+	  }
+	  else if (bulk_buffer[18] == 0x07)
+	  {
+            printf("July");
+	  }
+	  else if (bulk_buffer[18] == 0x08)
+	  {
+            printf("August");
+	  }
+	  else if (bulk_buffer[18] == 0x09)
+	  {
+            printf("September");
+	  }
+	  else if (bulk_buffer[18] == 0x10)
+	  {
+            printf("October");
+	  }
+	  else if (bulk_buffer[18] == 0x11)
+	  {
+            printf("November");
+	  }
+	  else if (bulk_buffer[18] == 0x12)
+	  {
+            printf("December");
+	  }
+	  else
+	  {
+	    fprintf(stderr, "error for mounth, received %x expected a value from 01 to 12.\n", bulk_buffer[18]);
+	  }
+	  /* Year (century, year)*/
+	  printf("%x%x\n", bulk_buffer[20], bulk_buffer[19]);
 
 	  /* See time set on PocketStation*/
 	  printf("Clock set to:\n");
