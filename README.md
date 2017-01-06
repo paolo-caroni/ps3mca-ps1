@@ -18,10 +18,11 @@ gcc main.c `pkg-config --libs --cflags libusb-1.0`
 **Usage**
 
 "a.out v" for verify what type of card is (PS1 or PS2).<br>
-"a.out g" for verify if is a original card. Some known bug (see doc/FAQ).<br>
-"a.out p" for verify if is a original PocketStation card.<br>
+"a.out s" for verify if is a original card. Some known bug (see doc/FAQ).<br>
+"a.out x" for verify if is a PocketStation card.<br>
+"a.out z" for read directory and date set on PocketStation card.<br>
 "a.out r" for reading.<br>
-"a.out w" for writing (WARNING need a write.mcd file), unstable, use at your own risk.<br>
+"a.out w" for writing (WARNING need a write.mcd file), (see doc/FAQ).<br>
 
 **Supported file**
 
@@ -50,8 +51,8 @@ If not, see <http://www.gnu.org/licenses/>.
 
 **Tested**
 
-Reading 90% with some errors in the odd frame.<br>
-Writing 90% with some errors in the odd frame, unreadable on PS<br>
+Reading 100% with some errors on checksum.<br>
+Writing 90% with some errors in the odd frame, unreadable on PS if you use emulator image (see doc/FAQ)<br>
 
 
 **Documentation**

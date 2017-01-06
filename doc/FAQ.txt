@@ -1,4 +1,14 @@
-PS1 get id command bug
+PS1 get id command (ASCII "S")
 
 Don't run it if you have already run other commands in the last 5/10 minutes.
 Maybe can be a good idea remove your PS3mca unplug the USB, wait several minutes and replug it, then run this command.
+
+
+
+PS1 write command (ASCII "W")
+
+First of all this command actally need a "write.mcd" file, if there isn't you obtain a segmentation fault.
+If you have a pure (raw) image of memory card (*.psm, *.ps, *.ddf, *.mcr, *.mc...) rename it to "write.mcd".
+This command rewrite all memory card, reducing his life (limited write cycles).
+As far as I could detect images of pcsx-r give problems on PS2 (my PSone is dead I can play my PS1 games only on PS2).
+Maybe can be a good idea wait several minutes if you have already run other commands.
