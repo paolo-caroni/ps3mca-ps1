@@ -124,7 +124,7 @@ int PS3mca_verify_card ()
         /* Verify if there is a PS2 card*/
         else if (response_card_verification[0] == RESPONSE_CODE & response_card_verification[1] == RESPONSE_PS2_CARD)    
         {
-          printf("PS2 Memory Card.\n\n");
+          printf("PS2 Memory Card.\nFor the moment isn't in roadmap to support it (see FAQ).\n\n");
         }
 
         /* Other unknown PS3mca error*/
