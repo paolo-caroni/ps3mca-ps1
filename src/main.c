@@ -738,15 +738,50 @@ int PocketStation_get_dir_date ()
 
 	  /* See date set on PocketStation*/
 	  printf("For the Pocket Station is:\n");
-	  printf("the %x day ", bulk_buffer[17]);					/* Day*/
-	  printf("of the %x mounth ", bulk_buffer[18]);					/* Mounth*/
-	  printf("on %x%x \n", bulk_buffer[20], bulk_buffer[19]);			/* Century, year*/
+
+          /* Day of the week*/
+	  if (bulk_buffer[26] == 0x01)
+	  {
+            printf("Monday");
+	  }
+	  else if (bulk_buffer[26] == 0x02)
+	  {
+            printf("Tuesday");
+	  }
+	  else if (bulk_buffer[26] == 0x03)
+	  {
+            printf("Wednesday");
+	  }
+	  else if (bulk_buffer[26] == 0x04)
+	  {
+            printf("Thursday");
+	  }
+	  else if (bulk_buffer[26] == 0x05)
+	  {
+            printf("Friday");
+	  }
+	  else if (bulk_buffer[26] == 0x06)
+	  {
+            printf("Saturday");
+	  }
+	  else if (bulk_buffer[26] == 0x07)
+	  {
+            printf("Sunday");
+	  }
+	  else
+	  {
+	    fprintf(stderr, "error for day of the week, received %x expected a value from 01 to 07.\n", bulk_buffer[26]);
+	  }
+
+	  /* Date in the day/month/year format*/
+	  printf(" %x/", bulk_buffer[17]);						/* Day*/
+	  printf("%x/", bulk_buffer[18]);						/* Mounth*/
+	  printf("%x%x\n", bulk_buffer[20], bulk_buffer[19]);				/* Century, year*/
 
 	  /* See time set on PocketStation*/
 	  printf("Clock set to:\n");
-	  printf("%x.%x.%x \n", bulk_buffer[23], bulk_buffer[22], bulk_buffer[21]);	/* Hour.minutes.seconds*/
+	  printf("%x.%x.%x\n\n", bulk_buffer[23], bulk_buffer[22], bulk_buffer[21]);	/* Hour.minutes.seconds*/
 
-	  printf("%x day of the week\n\n", bulk_buffer[24]);				/* day (monday, tuesday, ...)*/
 
         } 
 
