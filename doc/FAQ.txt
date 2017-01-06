@@ -12,3 +12,11 @@ If you have a pure (raw) image of memory card (*.psm, *.ps, *.ddf, *.mcr, *.mc..
 This command rewrite all memory card, reducing his life (limited write cycles).
 As far as I could detect images of pcsx-r give problems on PS2 (my PSone is dead I can play my PS1 games only on PS2).
 Maybe can be a good idea wait several minutes if you have already run other commands.
+
+
+
+Why isn't in roadmap to support PS2 memorycard?
+
+First because my PS2 is alive.
+Second because PS2 authentication isn't good documented.
+Third because exist already other libusb driver to read and write it (see README.md).
