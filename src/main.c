@@ -297,7 +297,8 @@ int PS1_get_id ()
           /* Verify if is a memory card (SCPH-1020) or a PocketStation (SCPH-4000)*/
           if (bulk_buffer[6] == PS1CARD_REPLY_MC_ID_1 & bulk_buffer[7] == PS1CARD_REPLY_MC_ID_2 & bulk_buffer[8] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_1 & bulk_buffer[9] == PS1CARD_REPLY_COMMAND_ACKNOWLEDGE_2 & bulk_buffer[10] ==  PS1CARD_REPLY_NUMBER_FRAME_1 & bulk_buffer[11] == PS1CARD_REPLY_NUMBER_FRAME_2 & bulk_buffer[12] == PS1CARD_REPLY_FRAME_SIZE_1 & bulk_buffer[13] == PS1CARD_REPLY_FRAME_SIZE_2)
           {
-            printf("This card seems to be a original PS memory card (SCPH-1020), (SCPH-1170), (SCPH-119X) or a PocketStation (SCPH-4000).\n\n");
+            printf("This card seems to be a original PS memory card (SCPH-1020), (SCPH-1170), (SCPH-119X) or a PocketStation (SCPH-4000).\n");
+	    printf("If you have a PocketStation (SCPH-4000) try to run the \"x\" option.\n\n");
           } 
 
           /* Other unknown memorycard*/
@@ -537,6 +538,7 @@ int PocketStation_get_id ()
    (0)  TIME  Send dummy/zero, receive BCD Minute               (00h..59h)
    (0)  TIME  Send dummy/zero, receive BCD Hour                 (00h..23h)
    (0)  TIME  Send dummy/zero, receive BCD Day of Week          (01h..07h)
+   At midnight, the function may accidently return the date for the old day, and the time for the new day.
 */
 int PocketStation_get_dir_date ()
 {
@@ -829,14 +831,14 @@ int PocketStation_get_dir_date ()
 	    fprintf(stderr, "error for mounth, received %x expected a value from 01 to 12.\n", bulk_buffer[18]);
 	  }
 	  /* Year (century, year)*/
-	  printf("%x%x\n", bulk_buffer[20], bulk_buffer[19]);
+	  printf(" %x%x\n", bulk_buffer[20], bulk_buffer[19]);
 
 	  /* See time set on PocketStation*/
 	  printf("Clock set to:\n");
 	  printf("%x.%x.%x\n\n", bulk_buffer[23], bulk_buffer[22], bulk_buffer[21]);	/* Hour.minutes.seconds*/
 
-
         } 
+
 
 	/* Verify if PS3mca send status wrong code*/
         else if (bulk_buffer[0] == RESPONSE_CODE & bulk_buffer[1] == RESPONSE_WRONG)    
@@ -1340,7 +1342,7 @@ int main(int argc, char*argv[])
 		return PS3mca_verify_card ();
 		break;
 
-		case 'g':
+		case 's':
 		return PS1_get_id ();
 		break;
 
@@ -1352,11 +1354,11 @@ int main(int argc, char*argv[])
 		return PS1_write ();
 		break;
 
-		case 'p':
+		case 'x':
 		return PocketStation_get_id ();
 		break;
 
-		case 'd':
+		case 'z':
 		return PocketStation_get_dir_date ();
 		break;
             }
