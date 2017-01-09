@@ -370,15 +370,15 @@ int PocketStation_get_id ()
     /* See on screen what is transmitted for debug purpose*/
     #if DEBUG
     printf("%d bytes transmitted successfully.\n\n", numBytes);
-    printf("%x \n", cmd_get_id[0]);
-    printf("%x \n", cmd_get_id[1]);
-    printf("%x \n", cmd_get_id[2]);
-    printf("%x \n", cmd_get_id[3]);
-    printf("%x \n", cmd_get_id[4]);
-    printf("%x \n", cmd_get_id[5]);
-    printf("%x \n", cmd_get_id[6]);
-    printf("%x \n", cmd_get_id[7]);
-    printf("%x \n", cmd_get_id[8]);
+    printf("%x \n", cmd_get_id_pkst[0]);
+    printf("%x \n", cmd_get_id_pkst[1]);
+    printf("%x \n", cmd_get_id_pkst[2]);
+    printf("%x \n", cmd_get_id_pkst[3]);
+    printf("%x \n", cmd_get_id_pkst[4]);
+    printf("%x \n", cmd_get_id_pkst[5]);
+    printf("%x \n", cmd_get_id_pkst[6]);
+    printf("%x \n", cmd_get_id_pkst[7]);
+    printf("%x \n", cmd_get_id_pkst[8]);
     printf("\n");
     #endif
   }
@@ -678,45 +678,31 @@ int PocketStation_get_dir_date ()
 	  }
 
 	  /* Set curr_dir_index.bit8-15*/
-	  #if DEBUG
           printf("The curr_dir_index.bit8_15 is %x.\n", bulk_buffer[7]);
-	  #endif
 	  curr_dir_index_bit8_15 = bulk_buffer[7];
 
 	  /* Set curr_dir_index.bit0-7*/
-	  #if DEBUG
           printf("The curr_dir_index.bit0_7 is %x.\n", bulk_buffer[8]);
-	  #endif
 	  curr_dir_index_bit0_7 = bulk_buffer[8];
 
 	  /* Set ComFlags.bit0*/
-	  #if DEBUG
           printf("The ComFlags.bit0 is %x.\n", bulk_buffer[9]);
-	  #endif
 	  comflags_bit0 = bulk_buffer[9];
 
 	  /* Set ComFlags.bit1*/
-	  #if DEBUG
           printf("The ComFlags.bit1 is %x.\n", bulk_buffer[10]);
-	  #endif
 	  comflags_bit1 = bulk_buffer[10];
 
 	  /* Set ComFlags.bit3*/
-	  #if DEBUG
           printf("The ComFlags.bit3 is %x.\n", bulk_buffer[11]);
-	  #endif
 	  comflags_bit3 = bulk_buffer[11];
 
 	  /* Set ComFlags.bit2*/
-	  #if DEBUG
           printf("The ComFlags.bit2 is %x.\n", bulk_buffer[12]);
-	  #endif
 	  comflags_bit2 = bulk_buffer[12];
 
 	  /* Set F_SN.bit0-7*/
-	  #if DEBUG
           printf("The F_SN.bit0-7 is %x.\n", bulk_buffer[13]);
-	  #endif
 	  f_sn_bit0_7 = bulk_buffer[13];
 
 	  /* Set F_SN.bit8-15*/
@@ -726,15 +712,11 @@ int PocketStation_get_dir_date ()
 	  f_sn_bit8_15 = bulk_buffer[14];
 
 	  /* Set F_SN.bit16-23*/
-	  #if DEBUG
           printf("The F_SN.bit16-23 is %x.\n", bulk_buffer[15]);
-	  #endif
 	  f_sn_bit16_23 = bulk_buffer[15];
 
 	  /* Set F_SN.bit24-31*/
-	  #if DEBUG
           printf("The F_SN.bit24-31 is %x.\n", bulk_buffer[16]);
-	  #endif
 	  f_sn_bit24_31 = bulk_buffer[16];
 
 
