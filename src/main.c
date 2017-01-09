@@ -88,7 +88,8 @@ int PS3mca_verify_card ()
     printf("\nType of Memory Card:\n");
     /* See on screen what is transmitted for debug purpose*/
     #if DEBUG
-    printf("%d bytes transmitted successfully.\n\n", numBytes);
+    printf("\n%d bytes transmitted successfully.\n", numBytes);
+    printf("Send:\n");
     printf("%x \n", cmd_card_verification[0]);
     printf("%x \n", cmd_card_verification[1]);
     printf("\n");
@@ -111,8 +112,10 @@ int PS3mca_verify_card ()
     {
         /* See on screen what arrive for debug purpose*/
 	#if DEBUG
+	printf("Received:\n");
 	printf("%x \n", response_card_verification[0]);
 	printf("%x \n", response_card_verification[1]);
+	printf("\n");
         #endif
 
         /* Verify if there is a PS1 card*/
@@ -187,7 +190,8 @@ int PS1_get_id ()
     printf("\nSend PS1 GET ID COMMAND\n");
     /* See on screen what is transmitted for debug purpose*/
     #if DEBUG
-    printf("%d bytes transmitted successfully.\n\n", numBytes);
+    printf("\n%d bytes transmitted successfully.\n", numBytes);
+    printf("Send:\n");
     printf("%x \n", cmd_get_id[0]);
     printf("%x \n", cmd_get_id[1]);
     printf("%x \n", cmd_get_id[2]);
@@ -221,6 +225,7 @@ int PS1_get_id ()
     {
         /* See on screen what arrive for debug purpose*/
 	#if DEBUG
+	printf("Received:\n");
 	printf("%x \n", bulk_buffer[0]);
 	printf("%x \n", bulk_buffer[1]);
 	printf("%x \n", bulk_buffer[2]);
@@ -285,6 +290,7 @@ int PS1_get_id ()
 	printf("%x \n", bulk_buffer[61]);
 	printf("%x \n", bulk_buffer[62]);
 	printf("%x \n", bulk_buffer[63]);
+	printf("\n");
         #endif
 
         /* Verify if PS3mca send status succes code*/
@@ -369,7 +375,8 @@ int PocketStation_get_id ()
     printf("\nSend POKETSTATION GET ID COMMAND\n");
     /* See on screen what is transmitted for debug purpose*/
     #if DEBUG
-    printf("%d bytes transmitted successfully.\n\n", numBytes);
+    printf("\n%d bytes transmitted successfully.\n", numBytes);
+    printf("Send:\n");
     printf("%x \n", cmd_get_id_pkst[0]);
     printf("%x \n", cmd_get_id_pkst[1]);
     printf("%x \n", cmd_get_id_pkst[2]);
@@ -398,6 +405,7 @@ int PocketStation_get_id ()
     {
         /* See on screen what arrive for debug purpose*/
 	#if DEBUG
+	printf("Received:\n");
 	printf("%x \n", bulk_buffer[0]);
 	printf("%x \n", bulk_buffer[1]);
 	printf("%x \n", bulk_buffer[2]);
@@ -462,6 +470,7 @@ int PocketStation_get_id ()
 	printf("%x \n", bulk_buffer[61]);
 	printf("%x \n", bulk_buffer[62]);
 	printf("%x \n", bulk_buffer[63]);
+	printf("\n");
         #endif
 
         /* Verify if PS3mca send status succes code*/
@@ -564,7 +573,8 @@ int PocketStation_get_dir_date ()
     printf("\nSend POKETSTATION get Dir_index, ComFlags, F_SN, Date, and Time COMMAND\n");
     /* See on screen what is transmitted for debug purpose*/
     #if DEBUG
-    printf("%d bytes transmitted successfully.\n\n", numBytes);
+    printf("\n%d bytes transmitted successfully.\n", numBytes);
+    printf("Send:\n");
     printf("%x \n", cmd_get_dir_date_pkst[0]);
     printf("%x \n", cmd_get_dir_date_pkst[1]);
     printf("%x \n", cmd_get_dir_date_pkst[2]);
@@ -590,6 +600,7 @@ int PocketStation_get_dir_date ()
     {
         /* See on screen what arrive for debug purpose*/
 	#if DEBUG
+	printf("Received:\n");
 	printf("%x \n", bulk_buffer[0]);
 	printf("%x \n", bulk_buffer[1]);
 	printf("%x \n", bulk_buffer[2]);
@@ -654,6 +665,7 @@ int PocketStation_get_dir_date ()
 	printf("%x \n", bulk_buffer[61]);
 	printf("%x \n", bulk_buffer[62]);
 	printf("%x \n", bulk_buffer[63]);
+	printf("\n");
         #endif
 
         /* Verify if PS3mca send status succes code*/
@@ -913,7 +925,8 @@ int PS1_read ()
   {
     /* See on screen what is transmitted for debug purpose*/
     #if DEBUG
-    printf("%d bytes transmitted successfully on frame %d:\n", numBytes, frame);
+    printf("\n%d bytes transmitted successfully on frame %d:\n", numBytes, frame);
+    printf("Send:\n");
     printf("%x \n", cmd_read[0]);
     printf("%x \n", cmd_read[1]);
     printf("%x \n", cmd_read[2]);
