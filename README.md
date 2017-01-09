@@ -2,11 +2,12 @@
 ===
 
 this is a libusb driver to communicate with the PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) for PS1 cards (SCPH-1020, SCPH-1170 and SCPH-119X), maybe the PocketStation (SCPH-4000) and maybe other cards or device (like the MEMORY DISK DRIVE).
+The PS2 cards (SCPH-10020) and compatible is NOT supported (see doc/FAQ).
 
 
 **Requirements**
 
-* libusb;
+* libusb 1.0;
 * PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) or similar;
 * PS1 memory card, PocketStation and maybe other cards or device (like the MEMORY DISK DRIVE).
 
