@@ -718,9 +718,7 @@ int PocketStation_get_dir_date ()
 	  f_sn_bit0_7 = bulk_buffer[13];
 
 	  /* Set F_SN.bit8-15*/
-	  #if DEBUG
           printf("The F_SN.bit8-15 is %x.\n", bulk_buffer[14]);
-	  #endif
 	  f_sn_bit8_15 = bulk_buffer[14];
 
 	  /* Set F_SN.bit16-23*/
