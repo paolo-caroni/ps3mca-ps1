@@ -1133,7 +1133,7 @@ int PS1_write ()
   cmd_write[8] = msb;					/* First two significant digits of the frame value*/
   cmd_write[9] = lsb;					/* Last two significant digits of the frame value*/
   fread ( &cmd_write[10], 1, PS1CARD_FRAME_SIZE, input);/* Send Data Sector (128 bytes)*/
-  for (c = 8; c < 8+PS1CARD_FRAME_SIZE; c++)		/* Loop started at msb(8) and finished at last data byte(137)*/
+  for (c = 8; c < 8+2+PS1CARD_FRAME_SIZE; c++)		/* Loop started at msb(8) and finished at last data byte(137)*/
   {
 	checksum = checksum ^ cmd_write[c];		/* Checksum = MSB xor LSB xor all Data bytes*/
   }
