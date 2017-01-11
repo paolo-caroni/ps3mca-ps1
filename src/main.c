@@ -1117,8 +1117,6 @@ int PS1_write ()
   lsb = (uint8_t)(frame & 0x00FF);
   /* Clean command write*/
   memset(cmd_write, 0, sizeof(cmd_write));
-  /* Clean checksum*/
-  checksum = 0x00;
   /* This is the write command for memory card (SCPH-1020) or PocketStation (SCPH-4000)*/
   /* first 4 byte are about ps3 memory card adapter protocol*/
   cmd_write[0] = PS3MCA_CMD_FIRST;			/* First command for ps3mca protocol*/
@@ -1199,6 +1197,7 @@ int PS1_write ()
         {
           fprintf(stderr, "Bad Checksum Memory End Byte on frame %d.\n", frame);
 
+	  checksum = 0x00;					/* Clean checksum*/
 	  for (c = 8; c < 8+2+PS1CARD_FRAME_SIZE; c++)		/* Loop started at msb(8) and finished at last data byte(137)*/
 		{
 		  checksum = checksum ^ cmd_write[c];		/* Checksum = MSB xor LSB xor all Data bytes*/
