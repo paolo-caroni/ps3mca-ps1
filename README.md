@@ -52,8 +52,8 @@ If not, see <http://www.gnu.org/licenses/>.
 
 **Tested**
 
-Reading 100% with some errors on checksum.<br>
-Writing 90% with some errors in the odd frame, unreadable on PS if you use emulator image (see doc/FAQ)<br>
+Reading 100%.<br>
+Writing 90% with some errors in the odd frame, unreadable on PS if you use emulator image (see doc/FAQ).<br>
 
 
 **Documentation**

@@ -1020,7 +1020,7 @@ int PS1_read ()
 	checksum = 0x00;
 
 	/* Calc supposed checksum.*/
-	for (c = 12; c < 12+PS1CARD_FRAME_SIZE; c++)		/* Loop of msb + lsb + all data bytes*/
+	for (c = 12; c < 12+2+PS1CARD_FRAME_SIZE; c++)		/* Loop of msb + lsb + all data bytes*/
 	{
 	checksum = checksum ^ ps1_ram_buffer[c];		/* Checksum = MSB xor LSB xor all Data bytes*/
 	}
