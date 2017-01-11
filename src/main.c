@@ -1198,6 +1198,12 @@ int PS1_write ()
         else if (ps1_ram_buffer[141] == PS1CARD_REPLY_MEB_BAD_CHECKSUM)
         {
           fprintf(stderr, "Bad Checksum Memory End Byte on frame %d.\n", frame);
+
+	  for (c = 8; c < 8+2+PS1CARD_FRAME_SIZE; c++)		/* Loop started at msb(8) and finished at last data byte(137)*/
+		{
+		  checksum = checksum ^ cmd_write[c];		/* Checksum = MSB xor LSB xor all Data bytes*/
+		}
+	  fprintf(stderr, "In your image checksum is %x, should be %x.\n", cmd_write[138], checksum);
         }
  
         /* Verify Memory End Byte (0xFF=BadFrame)*/
