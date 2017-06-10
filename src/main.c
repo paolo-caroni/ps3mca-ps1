@@ -139,7 +139,7 @@ int PS3mca_verify_card ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected %d.\n", numBytes, sizeof(response_card_verification));
+      fprintf(stderr, "Received %d bytes, expected %lu.\n", numBytes, sizeof(response_card_verification));
     }
   }
   else
@@ -331,7 +331,7 @@ int PS1_get_id ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
@@ -505,7 +505,7 @@ int PocketStation_get_id ()
 
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
@@ -848,7 +848,7 @@ int PocketStation_get_dir_date ()
 
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
@@ -1060,7 +1060,7 @@ int PS1_read ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d bytes on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu bytes on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
     }
   }
 
@@ -1242,7 +1242,7 @@ int PS1_write ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d  on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu  on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
     }
   }
 
