@@ -11,18 +11,20 @@ The PS2 cards (SCPH-10020) and compatible is NOT supported (see doc/FAQ).
 
 ## Compiling
 
-```sh
-gcc main.c `pkg-config --libs --cflags libusb-1.0`
-```
+make
+
+By default, the flags for libusb are looked up via pkg-config; these can be overridden by setting the CFLAGS and LDFLAGS environment variables.
+
 
 ## Usage
 
-* `ps3mca-ps1 v` for verify what type of card is (PS1 or PS2).
-* `ps3mca-ps1 s` for verify if is a original card. Some known bug (see doc/FAQ).
-* `ps3mca-ps1 x` for verify if is a PocketStation card.
-* `ps3mca-ps1 z` for read directory and date set on PocketStation card.
-* `ps3mca-ps1 r` for reading.
-* `ps3mca-ps1 w` for writing (WARNING need a write.mcd file), (see doc/FAQ).
+"ps3mca-ps1 v" for verify what type of card is (PS1 or PS2).<br>
+"ps3mca-ps1 s" for verify if is a original card. Some known bug (see doc/FAQ).<br>
+"ps3mca-ps1 x" for verify if is a PocketStation card.<br>
+"ps3mca-ps1 z" for read directory and date set on PocketStation card.<br>
+"ps3mca-ps1 r" for reading.<br>
+"ps3mca-ps1 w" for writing (WARNING need a write.mcd file), (see doc/FAQ).<br>
+
 
 ## Supported file
 
