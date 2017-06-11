@@ -44,6 +44,55 @@ void delay(int milliseconds)		/* Delay definition*/
         now = clock();
 }
 
+int open_ps3mca()
+{
+
+  /* Initialise libusb. */
+  res = libusb_init(0);
+  if (res != 0)
+  {
+    fprintf(stderr, "Error initialising libusb.\n");
+    return 1;
+  }
+
+  /* Get the first device with the matching Vendor ID and Product ID. */
+  handle = libusb_open_device_with_vid_pid(0, USB_VENDOR, USB_PRODUCT);
+  if (!handle)
+  {
+    fprintf(stderr, "Unable to open device.\n");
+    fprintf(stderr, "Please verify PS3mca CECHZM1 (SCPH-98042) connection.\n");
+    return 1;
+  }
+
+  /* Check whether a kernel driver is attached to interface #0. If so, we'll 
+   * need to detach it.
+   */
+  if (libusb_kernel_driver_active(handle, 0))
+  {
+    res = libusb_detach_kernel_driver(handle, 0);
+    if (res == 0)
+    {
+      kernelDriverDetached = 1;
+    }
+    else
+    {
+      fprintf(stderr, "Error detaching kernel driver.\n");
+      return 1;
+    }
+  }
+
+  /* Claim interface #0. */
+  res = libusb_claim_interface(handle, 0);
+  if (res != 0)
+  {
+    fprintf(stderr, "Error claiming interface.\n");
+    return 1;
+  }
+
+  return 0;
+
+}
+
 void close_ps3mca()			/* Unmount the ps3mca*/
 {
 
@@ -70,6 +119,12 @@ void close_ps3mca()			/* Unmount the ps3mca*/
 /* --------------------------------------------PS3mca verification of card (PS1 or PS2)---------------------------------------------*/
 int PS3mca_verify_card ()
 {
+
+  if (open_ps3mca() != 0)
+  {
+    return 1;
+  }
+
   uint8_t cmd_card_verification[2];
   uint8_t response_card_verification[2];
 
@@ -139,7 +194,7 @@ int PS3mca_verify_card ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected %d.\n", numBytes, sizeof(response_card_verification));
+      fprintf(stderr, "Received %d bytes, expected %lu.\n", numBytes, sizeof(response_card_verification));
     }
   }
   else
@@ -147,6 +202,10 @@ int PS3mca_verify_card ()
     fprintf(stderr, "Error receiving message.\n");
   }
 
+  /* Unmount the ps3mca*/
+  close_ps3mca();
+
+  return 0;
 }
 /* -----------------------------------------End of PS3mca verification of card (PS1 or PS2)-----------------------------------------*/
 
@@ -160,6 +219,12 @@ int PS3mca_verify_card ()
 /* -------------------------------------------------------PS1 command get id--------------------------------------------------------*/
 int PS1_get_id ()
 {
+
+  if (open_ps3mca() != 0)
+  {
+    return 1;
+  }
+
   uint8_t cmd_get_id[14];
 
   /* This is the command get id for memory card (SCPH-1020) or PocketStation (SCPH-4000)*/
@@ -331,13 +396,18 @@ int PS1_get_id ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
   {
     fprintf(stderr, "Error receiving message.\n");
   }
+
+  /* Unmount the ps3mca*/
+  close_ps3mca();
+
+  return 0;
 
 }
 /* ----------------------------------------------------End of PS1 command get id----------------------------------------------------*/
@@ -350,6 +420,12 @@ int PS1_get_id ()
 /* ---------------------------------------------------PocketStation command get id--------------------------------------------------*/
 int PocketStation_get_id ()
 {
+
+  if (open_ps3mca() != 0)
+  {
+    return 1;
+  }
+
   uint8_t cmd_get_id_pkst[9];
 
   /* This is the command get id for PocketStation (SCPH-4000)*/
@@ -505,13 +581,18 @@ int PocketStation_get_id ()
 
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
   {
     fprintf(stderr, "Error receiving message.\n");
   }
+
+  /* Unmount the ps3mca*/
+  close_ps3mca();
+
+  return 0;
 
 }
 /* ------------------------------------------------End of PocketStation command get id----------------------------------------------*/
@@ -551,6 +632,12 @@ int PocketStation_get_id ()
 */
 int PocketStation_get_dir_date ()
 {
+
+  if (open_ps3mca() != 0)
+  {
+    return 1;
+  }
+
   uint8_t cmd_get_dir_date_pkst[25];
 
   /* This is the command get id for PocketStation (SCPH-4000)*/
@@ -848,13 +935,18 @@ int PocketStation_get_dir_date ()
 
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d.\n", numBytes, sizeof(bulk_buffer));
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu.\n", numBytes, sizeof(bulk_buffer));
     }
   }
   else
   {
     fprintf(stderr, "Error receiving message.\n");
   }
+
+  /* Unmount the ps3mca*/
+  close_ps3mca();
+
+  return 0;
 
 }
 /* ------------------------------End of PocketStation command get Dir_index, ComFlags, F_SN, Date, and Time-------------------------*/
@@ -886,6 +978,12 @@ int PocketStation_get_dir_date ()
 */
 int PS1_read ()
 {
+
+  if (open_ps3mca() != 0)
+  {
+    return 1;
+  }
+
   uint8_t cmd_read[144];
   FILE *output=fopen( "Readed_memory_card.mcd", "wb" );	/* Open and create a binary file output in writing*/
 
@@ -1060,7 +1158,7 @@ int PS1_read ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d bytes on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu bytes on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
     }
   }
 
@@ -1075,6 +1173,11 @@ int PS1_read ()
   /* Clean and close the file output*/
   fflush(output);
   fclose(output);
+
+  /* Unmount the ps3mca*/
+  close_ps3mca();
+
+  return 0;
 
 }
 /* ----------------------------------------------------End of PS1 command read------------------------------------------------------*/
@@ -1104,6 +1207,12 @@ int PS1_read ()
 */
 int PS1_write ()
 {
+
+  if (open_ps3mca() != 0)
+  {
+    return 1;
+  }
+
   uint8_t cmd_write[142];
   FILE *input=fopen( "write.mcd", "rb" );		/* Open write.mcd in reading*/
 
@@ -1242,7 +1351,7 @@ int PS1_write ()
     }
     else
     {
-      fprintf(stderr, "Received %d bytes, expected a maximum of %d  on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
+      fprintf(stderr, "Received %d bytes, expected a maximum of %lu  on frame %d.\n", numBytes, sizeof(ps1_ram_buffer), frame);
     }
   }
 
@@ -1263,6 +1372,11 @@ int PS1_write ()
   fflush(input);
   fclose(input);
 
+  /* Unmount the ps3mca*/
+  close_ps3mca();
+
+  return 0;
+
 }
 /* ----------------------------------------------------End of PS1 command write------------------------------------------------------*/
 
@@ -1277,91 +1391,54 @@ int PS1_write ()
 /*-----------------------------------------------------------Main program-----------------------------------------------------------*/
 int main(int argc, char*argv[])
 {
-  /* Initialise libusb. */
-  res = libusb_init(0);
-  if (res != 0)
+
+  if (argc > 2)
   {
-    fprintf(stderr, "Error initialising libusb.\n");
-    return 1;
+    fprintf(stderr, "Warning: %s only processes one option at a time! %d were given.\n", argv[0], argc - 1);
   }
 
-  /* Get the first device with the matching Vendor ID and Product ID. */
-  handle = libusb_open_device_with_vid_pid(0, USB_VENDOR, USB_PRODUCT);
-  if (!handle)
+  if (argc < 2)
   {
-    fprintf(stderr, "Unable to open device.\n");
-    fprintf(stderr, "Please verify PS3mca CECHZM1 (SCPH-98042) connection.\n");
+    fprintf(stderr, "No options given!\n");
     return 1;
   }
-
-  /* Check whether a kernel driver is attached to interface #0. If so, we'll 
-   * need to detach it.
-   */
-  if (libusb_kernel_driver_active(handle, 0))
+  else
   {
-    res = libusb_detach_kernel_driver(handle, 0);
-    if (res == 0)
+    /* Switch-case argv*/
+    switch (*argv[1])  
     {
-      kernelDriverDetached = 1;
+      default:
+        fprintf(stderr, "Unknown option %s\n", argv[1]);
+        break;
+
+      case 'v':
+        return PS3mca_verify_card ();
+        break;
+
+      case 's':
+        return PS1_get_id ();
+        break;
+
+      case 'r':
+        return PS1_read ();
+        break;
+
+      case 'w':
+        return PS1_write ();
+        break;
+
+      case 'x':
+        return PocketStation_get_id ();
+        break;
+
+      case 'z':
+        return PocketStation_get_dir_date ();
+        break;
     }
-    else
-    {
-      fprintf(stderr, "Error detaching kernel driver.\n");
-      return 1;
-    }
   }
 
-  /* Claim interface #0. */
-  res = libusb_claim_interface(handle, 0);
-  if (res != 0)
-  {
-    fprintf(stderr, "Error claiming interface.\n");
-    return 1;
-  }
+  return 1;
 
-
-  /* Switch-case argv*/
-  while (++(*argv))
-  {
-	if ( **argv == '-' )
-	{
-            switch (*argv[1])  
-            {
-		default:
-		fprintf(stderr, "Unknown option %c\n", (*argv)[1]);
-		break;
-
-		case 'v':
-		return PS3mca_verify_card ();
-		break;
-
-		case 's':
-		return PS1_get_id ();
-		break;
-
-		case 'r':
-		return PS1_read ();
-		break;
-
-		case 'w':
-		return PS1_write ();
-		break;
-
-		case 'x':
-		return PocketStation_get_id ();
-		break;
-
-		case 'z':
-		return PocketStation_get_dir_date ();
-		break;
-            }
-	}
-  }
-
-  /* Unmount the ps3mca*/
-  close_ps3mca();
-
-  return 0;
 }
 /*--------------------------------------------------------End of Main program-------------------------------------------------------*/
 
