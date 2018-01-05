@@ -1127,7 +1127,7 @@ int PS1_read ()
         if (ps1_ram_buffer[142] == checksum)
         {
 	#if DEBUG
-	printf("Good checksum on frame %d.\n" frame);
+	printf("Good checksum on frame %d.\n", frame);
         #endif
         }
 
@@ -1143,7 +1143,7 @@ int PS1_read ()
         if (ps1_ram_buffer[143] == PS1CARD_REPLY_MEB_GOOD)
         {
 	#if DEBUG
-	printf("Good Memory End Byte on frame %d.\n" frame);
+	printf("Good Memory End Byte on frame %d.\n", frame);
         #endif
         }
 
