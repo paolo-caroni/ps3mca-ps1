@@ -4,8 +4,6 @@ ToDo list:
 
 - Correct writing support (errors in the odd frame);
 
-- Complete pocketstation support (maybe impossible, since the ps3mca adapter seems to accept ONLY "r","w" and "s" command);
-
 - Add clock support;
 
 - Split monolitic source;

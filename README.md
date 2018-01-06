@@ -1,6 +1,6 @@
 # ps3mca-ps1
 
-this is a libusb driver to communicate with the PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) for PS1 cards (SCPH-1020, SCPH-1170 and SCPH-119X), maybe the PocketStation (SCPH-4000) and maybe other cards or device (like the MEMORY DISK DRIVE).
+this is a libusb driver to communicate with the PlayStation 3 Memory Card Adaptor CECHZM1 (SCPH-98042) for PS1 cards (SCPH-1020, SCPH-1170 and SCPH-119X), partially the PocketStation (SCPH-4000) and maybe other cards or device (like the MEMORY DISK DRIVE).
 The PS2 cards (SCPH-10020) and compatible is NOT supported (see doc/FAQ).
 
 ## Requirements
@@ -20,8 +20,6 @@ By default, the flags for libusb are looked up via pkg-config; these can be over
 
 "ps3mca-ps1 v" for verify what type of card is (PS1 or PS2).<br>
 "ps3mca-ps1 s" for verify if is a original card. Some known bug (see doc/FAQ).<br>
-"ps3mca-ps1 x" for verify if is a PocketStation card.<br>
-"ps3mca-ps1 z" for read directory and date set on PocketStation card.<br>
 "ps3mca-ps1 r" for reading.<br>
 "ps3mca-ps1 w" for writing (WARNING need a write.mcd file), (see doc/FAQ).<br>
 
@@ -39,6 +37,7 @@ Virtual Memory Card PS1 (.VM1): VM1 is a PS1 memory card in "PS3 format", used i
 ## Author
 
 Written by [Paolo Caroni](kenren89@gmail.com) and released under the terms of the GNU GPL, version 3, or later.
+Please read doc/FAQ.txt before writing to me.
 
 ## License
 

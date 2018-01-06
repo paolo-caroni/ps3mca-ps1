@@ -20,3 +20,12 @@ Why isn't in roadmap to support PS2 memorycard (SCPH-10020)?
 First because my PS2 is alive.
 Second because PS2 authentication isn't good documented.
 Third because exist already other libusb driver to read and write it (see README.md).
+
+
+
+Why isn't in roadmap to support PocketStation memorycard (SCPH-4000) properly?
+
+I tried for at least a year, I bought several pockestations used to test.
+I came to the conclusion that the ps3mca protocol does not support specific PocketStation commands.
+Therefore, support for the PocketStation is impossible due to hardware limitations.
+I have removed the PocketStation early support since 06 gen 2018.
