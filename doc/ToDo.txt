@@ -10,6 +10,8 @@ ToDo list:
 
 - Make possible read and write a particular frame value or a group (for example only 1 block);
 
+- Correct PocketStation writing (actually unsupported);
+
 - Make possible write only changed frame for improve lifetime of memorycard;
 
 - Understand why there is the problem if send cmd in sequence;
