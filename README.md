@@ -52,11 +52,12 @@ If not, see <http://www.gnu.org/licenses/>.
 ## Tested
 
 Reading 100%.  
-Writing 90% with some errors in the odd frame, unreadable on PS if you use emulator image (see doc/FAQ).
+Writing unofficial and original memory card 99% with some errors in the odd frame, unreadable on PS if you use emulator image (see doc/FAQ).  
+Writing PocketStation 2%, DON'T use it, actually write only the fist frame, need different delay structure. (Maybe since the clock isn't implemented and/or until we can write specific frames.)
 
 ## Documentation
 
-PS1 Memory Card
+PS1 Memory Card  
 <http://problemkaputt.de/psx-spx.htm#memorycardreadwritecommands>  
 
 ## Other similar but unrelated projects
