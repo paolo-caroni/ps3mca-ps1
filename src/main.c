@@ -1074,10 +1074,11 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (!((first_frame >= 0) && (first_frame < 1023) && (last_frame > 0) && (last_frame <= 1023) ))
+	if (!((first_frame >= 0) && (first_frame < 1023) && (last_frame > 0) && (last_frame <= 1023) && (first_frame <= last_frame)))
 		{
 		fprintf(stderr, "Error on number of sector, possible values are 0 to 1023.\n");
-		fprintf(stderr, "Override sector secting to all memory card.\n");
+		fprintf(stderr, "First frame must be minor or equal of last frame.\n");
+		fprintf(stderr, "Overwrite the frame sector by selecting all the memory card.\n");
         	fprintf(stderr, "%d = original first_frame\n", first_frame);
         	fprintf(stderr, "%d = original last_frame\n", last_frame);
 		first_frame = PS1CARD_MIN_FRAME;
