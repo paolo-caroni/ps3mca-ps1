@@ -676,7 +676,7 @@ int PS1_write ()
 
 
   /* Start of frame to frame loop*/
-  for (frame = PS1CARD_MIN_FRAME; frame <= PS1CARD_MAX_FRAME; frame++)
+  for (frame = first_frame; frame <= last_frame; frame++)
   {
 
   /* Split frame value in two*/
@@ -993,12 +993,12 @@ int PS1_write ()
 
 
 /*-----------------------------------------------------------Main program-----------------------------------------------------------*/
-int main(int argc, char*argv[])
+int main(int argc, char* argv[])
 {
 
-  if (argc > 2)
+  if (argc > 4)
   {
-    fprintf(stderr, "Warning: %s only processes one option at a time! %d were given.\n", argv[0], argc - 1);
+    fprintf(stderr, "Warning: uncorrect command. See usage of program.\n");
   }
 
   if (argc < 2)
@@ -1008,29 +1008,85 @@ int main(int argc, char*argv[])
   }
   else
   {
-    /* Switch-case argv*/
-    switch (*argv[1])  
+    /* Switch-case argv[1][0] select what command use*/
+    switch (argv[1][0])  
     {
       default:
-        fprintf(stderr, "Unknown option %s\n", argv[1]);
+        fprintf(stderr, "Unknown option %s\n", argv[1][0]);
         break;
 
       case 'v':
-        return PS3mca_verify_card ();
-        break;
+	/* If tipe "ps3mca-ps1 v"*/
+	if (argc == (2))
+	{
+	return PS3mca_verify_card ();
+	}
+	else
+	{
+		fprintf(stderr, "Warning: %s only processes one option at a time! %d were given.\n", argv[0], argc - 1);
+		return 1;
+	}
+	break;
 
       case 's':
-        return PS1_get_id ();
-        break;
+	/* If tipe "ps3mca-ps1 s"*/
+	if (argc == (2))
+	{
+	return PS1_get_id ();
+	}
+	else
+	{
+		fprintf(stderr, "Warning: %s only processes one option at a time! %d were given.\n", argv[0], argc - 1);
+		return 1;
+	}
+	break;
 
       case 'r':
-        return PS1_read ();
-        break;
+	/* If tipe "ps3mca-ps1 r"*/
+	if (argc == (2))
+	{
+	return PS1_read ();
+	}
+	else
+	{
+		fprintf(stderr, "Warning: %s only processes one option at a time! %d were given.\n", argv[0], argc - 1);
+		return 1;
+	}
+	break;
 
       case 'w':
-        return PS1_write ();
-        break;
+	/* If tipe "ps3mca-ps1 w"*/
+	if (argc == (2))
+	{
+		first_frame = PS1CARD_MIN_FRAME;
+		last_frame = PS1CARD_MAX_FRAME;	
+	}
+	/* If type "ps3mca-ps1 w number number"*/
+	else if (argc == (2+2))
+	{
+		first_frame = atoi(argv[2]);
+		last_frame = atoi(argv[3]);
+	}
+	else
+	{
+		fprintf(stderr, "Error on usage of wirte command.\n");
+		return 1;
+	}
+
+	if (!((first_frame >= 0) && (first_frame < 1023) && (last_frame > 0) && (last_frame <= 1023)))
+		{
+		fprintf(stderr, "Error on number of sector, possible values are 0 to 1023.\n");
+		fprintf(stderr, "Override sector secting to all memory card.\n");
+        	fprintf(stderr, "%d = original first_frame\n", first_frame);
+        	fprintf(stderr, "%d = original last_frame\n", last_frame);
+		first_frame = PS1CARD_MIN_FRAME;
+		last_frame = PS1CARD_MAX_FRAME;
+		}
+	return PS1_write ();
+	break;
     }
+
+
   }
 
   return 1;

@@ -57,7 +57,6 @@ uint16_t frame;						/* Frame value, 0000h to 03ffh*/
 uint8_t msb;						/* First two significant digits of the frame value*/
 uint8_t lsb;						/* Last two significant digits of the frame value*/
 uint8_t checksum;					/* Checksum variable*/
-int writing_delay = 50;					/* Milliseconds to wait on every frame*/
 uint8_t ps1_ram_buffer[256];				/* 256 bytes of RAM on chip*/
 /*int PS1CARD_BLOCK_SIZE = 8192;				/* single block 1024x8=8192 bytes*/
 /*int PS1CARD_MAX_BLOCK = 16;				/* max number of block (however 1 is lost for formatting MC)*/
@@ -98,6 +97,15 @@ uint8_t PS1CARD_REPLY_FRAME_SIZE_2 = 		0x80;	/* Last two significant digits of t
 
 
 /* -----------------------------------------------End of PS1 Memory Card commands list------------------------------------------------*/
+
+
+/* --------------------------------------------------------Program definitions--------------------------------------------------------*/
+/* Variables list*/
+int writing_delay = 50;					/* Milliseconds to wait on every frame*/
+uint16_t first_frame;					/* First frame to be writed*/
+uint16_t last_frame;					/* Last frame to be wited*/
+
+/* ----------------------------------------------------End of Program definitions-----------------------------------------------------*/
 
 
 
