@@ -99,6 +99,9 @@ uint8_t PS1CARD_REPLY_FRAME_SIZE_2 = 		0x80;	/* Last two significant digits of t
 /* -----------------------------------------------End of PS1 Memory Card commands list------------------------------------------------*/
 
 
+
+
+
 /* --------------------------------------------------------Program definitions--------------------------------------------------------*/
 /* Variables list*/
 int writing_delay = 50;					/* Milliseconds to wait on every frame*/

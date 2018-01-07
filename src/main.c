@@ -697,6 +697,7 @@ int PS1_write ()
   cmd_write[7] = 0x00;					/* Ask Memory Card ID2*/
   cmd_write[8] = msb;					/* First two significant digits of the frame value*/
   cmd_write[9] = lsb;					/* Last two significant digits of the frame value*/
+  fseek ( input, frame*PS1CARD_FRAME_SIZE, SEEK_SET);	/* Read the file since frame value, needed for start on frame different to 0*/
   fread ( &cmd_write[10], 1, PS1CARD_FRAME_SIZE, input);/* Send Data Sector (128 bytes)*/
   cmd_write[139] = 0x00;				/* Receive Command Acknowledge 1*/
   cmd_write[140] = 0x00;				/* Receive Command Acknowledge 2*/
@@ -1073,7 +1074,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (!((first_frame >= 0) && (first_frame < 1023) && (last_frame > 0) && (last_frame <= 1023)))
+	if (!((first_frame >= 0) && (first_frame < 1023) && (last_frame > 0) && (last_frame <= 1023) ))
 		{
 		fprintf(stderr, "Error on number of sector, possible values are 0 to 1023.\n");
 		fprintf(stderr, "Override sector secting to all memory card.\n");
