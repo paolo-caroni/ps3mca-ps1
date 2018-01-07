@@ -1074,7 +1074,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	if (!((first_frame >= PS1CARD_MIN_FRAME) && (first_frame < PS1CARD_MAX_FRAME) && (last_frame >= PS1CARD_MIN_FRAME) && (last_frame <= PS1CARD_MAX_FRAME) && (first_frame <= last_frame)))
+	if (!((first_frame >= PS1CARD_MIN_FRAME) && (first_frame <= PS1CARD_MAX_FRAME) && (last_frame >= PS1CARD_MIN_FRAME) && (last_frame <= PS1CARD_MAX_FRAME) && (first_frame <= last_frame)))
 		{
 		fprintf(stderr, "Error on number of sector, possible values are 0 to 1023.\n");
 		fprintf(stderr, "First frame must be minor or equal of last frame.\n");
