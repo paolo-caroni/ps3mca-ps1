@@ -680,8 +680,8 @@ int PS1_write ()
 	fprintf(stderr, "Error on number of sector, possible values are 0 to 1023.\n");
 	fprintf(stderr, "First frame must be minor or equal of last frame.\n");
 	fprintf(stderr, "Overwrite the frame sector by selecting all the memory card.\n");
-	fprintf(stderr, "Original first_frame was %d\n", first_frame);
-	fprintf(stderr, "Original last_frame was %d\n", last_frame);
+	fprintf(stderr, "The original first_frame was %d, overwrited to 0\n", first_frame);
+	fprintf(stderr, "The original last_frame was %d, overwrited to 1023\n", last_frame);
 	first_frame = PS1CARD_MIN_FRAME;
 	last_frame = PS1CARD_MAX_FRAME;
 	}
