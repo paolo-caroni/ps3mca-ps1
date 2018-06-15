@@ -674,6 +674,17 @@ int PS1_write ()
   uint8_t cmd_write[142];
   FILE *input=fopen( "write.mcd", "rb" );		/* Open write.mcd in reading*/
 
+  /* Verify first frame and last frame value, if impossible overwrite it*/
+  if (!((first_frame >= PS1CARD_MIN_FRAME) && (first_frame <= PS1CARD_MAX_FRAME) && (last_frame >= PS1CARD_MIN_FRAME) && (last_frame <= PS1CARD_MAX_FRAME) && (first_frame <= last_frame)))
+	{
+	fprintf(stderr, "Error on number of sector, possible values are 0 to 1023.\n");
+	fprintf(stderr, "First frame must be minor or equal of last frame.\n");
+	fprintf(stderr, "Overwrite the frame sector by selecting all the memory card.\n");
+	fprintf(stderr, "Original first_frame was %d\n", first_frame);
+	fprintf(stderr, "Original last_frame was %d\n", last_frame);
+	first_frame = PS1CARD_MIN_FRAME;
+	last_frame = PS1CARD_MAX_FRAME;
+	}
 
   /* Start of frame to frame loop*/
   for (frame = first_frame; frame <= last_frame; frame++)
@@ -1060,31 +1071,21 @@ int main(int argc, char* argv[])
 	if (argc == (2))
 	{
 		first_frame = PS1CARD_MIN_FRAME;
-		last_frame = PS1CARD_MAX_FRAME;	
+		last_frame = PS1CARD_MAX_FRAME;
+		return PS1_write ();
 	}
 	/* If type "ps3mca-ps1 w number number"*/
 	else if (argc == (2+2))
 	{
 		first_frame = atoi(argv[2]);
 		last_frame = atoi(argv[3]);
+		return PS1_write ();
 	}
 	else
 	{
 		fprintf(stderr, "Error on usage of wirte command.\n");
 		return 1;
 	}
-
-	if (!((first_frame >= PS1CARD_MIN_FRAME) && (first_frame <= PS1CARD_MAX_FRAME) && (last_frame >= PS1CARD_MIN_FRAME) && (last_frame <= PS1CARD_MAX_FRAME) && (first_frame <= last_frame)))
-		{
-		fprintf(stderr, "Error on number of sector, possible values are 0 to 1023.\n");
-		fprintf(stderr, "First frame must be minor or equal of last frame.\n");
-		fprintf(stderr, "Overwrite the frame sector by selecting all the memory card.\n");
-        	fprintf(stderr, "%d = original first_frame\n", first_frame);
-        	fprintf(stderr, "%d = original last_frame\n", last_frame);
-		first_frame = PS1CARD_MIN_FRAME;
-		last_frame = PS1CARD_MAX_FRAME;
-		}
-	return PS1_write ();
 	break;
     }
 
