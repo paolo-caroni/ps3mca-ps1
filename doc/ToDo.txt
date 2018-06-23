@@ -1,14 +1,10 @@
 ToDo list:
 
-- Correct reading support (errors in checksum);
-
 - Correct writing support (errors in the odd frame);
 
 - Add clock support;
 
 - Split monolitic source;
-
-- Improve writing of a particular frame value or a group (for example only 1 block);
 
 - Correct PocketStation writing (actually unsupported);
 
