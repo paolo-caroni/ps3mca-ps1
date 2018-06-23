@@ -52,9 +52,9 @@ If not, see <http://www.gnu.org/licenses/>.
 
 ## Tested
 
-Reading 100%.  
-Writing unofficial and original memory card 99% with some errors in the odd frame, unreadable on PS if you use emulator image (see doc/FAQ).  
-Writing PocketStation 2%, DON'T use it, actually write only the fist frame, need different delay structure. (Maybe since the clock isn't implemented and/or until we can write specific frames.)
+Reading <div class="phishy">100%</div>.  
+Writing unofficial and original memory card <div class="phishy">99%</div> with some errors in the odd frame, unreadable on PS if you use emulator image (see doc/FAQ).  
+Writing PocketStation <div class="phishy">0.1%</div>, DON'T use it, actually write only the fist frame, need different delay structure. (The clock isn't implemented yet.)
 
 ## Documentation
 
