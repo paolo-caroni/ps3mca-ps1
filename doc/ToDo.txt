@@ -4,7 +4,7 @@ ToDo list:
 
 - Add clock support;
 
-- Split monolitic source;
+- Split monolithic source;
 
 - Correct PocketStation writing (actually unsupported);
 
