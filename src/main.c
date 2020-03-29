@@ -64,8 +64,17 @@ int open_ps3mca()
     return 1;
   }
 
-  /* Check whether a kernel driver is attached to interface #0. If so, we'll 
-   * need to detach it.
+  /* Remove OS that don't support libusb_kernel_driver_active function.
+   * Microsoft Windows 16bit*/
+  #if defined (_WIN16)
+  /* Microsoft Windows 32bit*/
+  #elif defined (_WIN32)
+  /* Microsoft Windows 64bit*/
+  #elif defined (_WIN64)
+  /* All other OS*/
+  #else
+  /* Check whether a kernel driver is attached to interface #0.
+   * If so, we'll need to detach it.
    */
   if (libusb_kernel_driver_active(handle, 0))
   {
@@ -80,6 +89,7 @@ int open_ps3mca()
       return 1;
     }
   }
+  #endif
 
   /* Claim interface #0. */
   res = libusb_claim_interface(handle, 0);
