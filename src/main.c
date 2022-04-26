@@ -16,12 +16,20 @@
  */
 
 #include <stdio.h>
-#include <libusb-1.0/libusb.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include "ps3mca-ps1-driver.h"
+
+#if __APPLE__
+  #include <TargetConditionals.h>
+  #if TARGET_OS_MAC
+    #include <libusb.h> // Makefile pkg-config call returns the full path on Mac OS (M1)
+  #endif
+#else
+  #include <libusb-1.0/libusb.h>
+#endif
 
 void processMessage(const uint8_t*);
 
@@ -72,24 +80,26 @@ int open_ps3mca()
   #elif defined (_WIN32)
   /* Microsoft Windows 64bit*/
   #elif defined (_WIN64)
+  /* Mac OS*/
+  #elif defined (__APPLE__)
   /* All other OS*/
   #else
-  /* Check whether a kernel driver is attached to interface #0.
-   * If so, we'll need to detach it.
-   */
-  if (libusb_kernel_driver_active(handle, 0))
-  {
-    res = libusb_detach_kernel_driver(handle, 0);
-    if (res == 0)
+    /* Check whether a kernel driver is attached to interface #0.
+     * If so, we'll need to detach it.
+     */
+    if (libusb_kernel_driver_active(handle, 0))
     {
-      kernelDriverDetached = 1;
+      res = libusb_detach_kernel_driver(handle, 0);
+        if (res == 0)
+        {
+          kernelDriverDetached = 1;
+        }
+        else
+        {
+          fprintf(stderr, "Error detaching kernel driver.\n");
+          return 1;
+        }
     }
-    else
-    {
-      fprintf(stderr, "Error detaching kernel driver.\n");
-      return 1;
-    }
-  }
   #endif
 
   /* Claim interface #0. */
@@ -453,8 +463,14 @@ int PS1_read ()
     return 1;
   }
 
+  // get the timestamp for file saving.
+  char filename[70];
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
+  sprintf(filename, "memory_card_out_%d-%02d-%02d_%02d-%02d-%02d.mcr", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+
   uint8_t cmd_read[144];
-  FILE *output=fopen( "Readed_memory_card.mcd", "wb" );	/* Open and create a binary file output in writing*/
+  FILE *output=fopen( filename, "wb" );	/* Open and create a binary file output in writing*/
 
 
 
