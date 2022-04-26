@@ -467,7 +467,7 @@ int PS1_read ()
   char filename[70];
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
-  sprintf(filename, "memory_card_out_%d-%02d-%02d_%02d-%02d-%02d.mcr", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  sprintf(filename, "memory_card_out_%d-%02d-%02d_%02d-%02d-%02d.mcd", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
 
   uint8_t cmd_read[144];
   FILE *output=fopen( filename, "wb" );	/* Open and create a binary file output in writing*/
