@@ -1051,7 +1051,7 @@ int main(int argc, char* argv[])
     switch (argv[1][0])  
     {
       default:
-        fprintf(stderr, "Unknown option %s\n", argv[1][0]);
+        fprintf(stderr, "Unknown option %c\n", argv[1][0]);
         break;
 
       case 'v':
