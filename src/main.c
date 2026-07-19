@@ -467,7 +467,7 @@ int PS1_read ()
   char filename[70];
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
-  sprintf(filename, "memory_card_out_%d-%02d-%02d_%02d-%02d-%02d.mcd", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  sprintf(filename, "memory_card_out_%d-%02d-%02d.mcd", tm.tm_mon + 1, tm.tm_mday, tm.tm_year + 1900);
 
   uint8_t cmd_read[144];
   FILE *output=fopen( filename, "wb" );	/* Open and create a binary file output in writing*/
@@ -1035,14 +1035,21 @@ int PS1_write ()
 int main(int argc, char* argv[])
 {
 
-  if (argc > 4)
+  if (argc > 4 || argc < 2)
   {
-    fprintf(stderr, "Warning: uncorrect command. See usage of program.\n");
-  }
-
-  if (argc < 2)
-  {
-    fprintf(stderr, "No options given!\n");
+    fprintf(stderr, "Usage: %s \033[1m[OPTION]\033[0m\n"
+    "Read/Write/Verify Sony PlayStation 1 Memory Cards\n\n"
+    "     \033[1mv\033[0m - Verify if Sony Playstation 1 or Sony Playstation 2 Memory Card\n"
+    "     \033[1;31m!!!PLAYSTATION 2 MEMORY CARDS ARE UNSUPPORTED!!!\033[0m\n\n"
+    "     \033[1ms\033[0m - Verify if Official Sony Playstation 1 Memory Card\n"
+    "     \033[1;31m!!!DO NOT RUN IF YOU HAVE RUN OTHER COMMANDS WITHIN LAST 5/10 MINUTES!!! \033[0m\n"
+    "     \033[1;31m!!!IF YOU MUST, UNPLUG PS3MCA, WAIT 5 MINUTES, AND PLUG BACK IN BEFORE RUNNING!!!\033[0m\n\n"
+    "     \033[1mr\033[0m - Read entire Memory Card to file with timestamped filename.\n\n"
+    "     \033[1mw\033[0m - Write to memory card from file named write.mcd\n"
+    "     \033[1;31m!!!THIS WILL OVERWRITE YOUR ENTIRE MEMORY CARD!!!\033[0m\n\n"
+    "     \033[1mw 0 1023\033[0m - Write to Memory Card from Frame 0 through Frame 1023.\n"
+    "     \033[1;31m!!!VALUES ARE ARBITRARY. FIRST FRAME MUST BE LESS THAN OR EQUAL TO LAST FRAME!!!\033[0m\n",
+    argv[0]);
     return 1;
   }
   else
